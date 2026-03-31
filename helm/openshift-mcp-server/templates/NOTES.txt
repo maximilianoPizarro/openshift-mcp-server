@@ -1,0 +1,44 @@
+============================================================
+  OpenShift MCP Server deployed successfully!
+============================================================
+
+MCP Endpoint (Streamable HTTP):
+  http://{{ include "openshift-mcp-server.fullname" . }}.{{ .Values.namespace }}.svc.cluster.local:{{ .Values.service.port }}/mcp
+
+IMPORTANT: Use /mcp (Streamable HTTP), not /mcp/sse.
+OLS uses POST requests which require the Streamable HTTP endpoint.
+
+Available MCP Tools (19):
+  Monitoring:
+    - checkClusterHealth      : Overall cluster health and stability
+    - getPerformanceMetrics   : Node and pod performance metrics
+    - detectResourceIssues    : Resource allocation issues
+    - analyzePodDisruptions   : Pod restart and eviction analysis
+    - checkNodeConditions     : Node conditions and taints
+    - monitorDeployments      : Deployment rollout health
+    - checkKubeletStatus      : Kubelet service status
+    - checkCrioStatus         : CRI-O runtime status
+    - analyzeJournalctlPodErrors : Journal log analysis
+
+  Deployment:
+    - createDeployment        : Create deployments
+    - deployDatabase          : Deploy databases (PostgreSQL, MySQL, MongoDB, Redis)
+    - createHpa               : Configure horizontal pod autoscalers
+    - createService           : Create services
+    - createNetworkPolicy     : Create network policies
+
+  Performance Testing:
+    - runKubeBurner           : Cluster density testing
+    - runStorageBenchmark     : Storage I/O benchmarks
+    - runNetworkTest          : Network throughput tests
+    - runCpuStressTest        : CPU/memory stress tests
+    - runDatabaseBenchmark    : Database performance tests
+
+To integrate with OpenShift Lightspeed, add to your OLSConfig:
+  spec:
+    featureGates:
+      - MCPServer
+    mcpServers:
+      - name: openshift-mcp-server
+        timeout: 30
+        url: 'http://{{ include "openshift-mcp-server.fullname" . }}.{{ .Values.namespace }}.svc.cluster.local:{{ .Values.service.port }}/mcp'

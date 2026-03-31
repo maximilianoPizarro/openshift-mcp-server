@@ -1,0 +1,26 @@
+apiVersion: ols.openshift.io/v1alpha1
+kind: OLSConfig
+metadata:
+  name: cluster
+spec:
+  featureGates:
+    - MCPServer
+  mcpServers:
+    - name: openshift-mcp-server
+      timeout: 30
+      url: 'http://openshift-mcp-server.openshift-lightspeed.svc.cluster.local:8080/mcp'
+  llm:
+    providers:
+      - name: watsonx
+        type: watsonx
+        url: 'https://us-south.ml.cloud.ibm.com'
+        credentialsSecretRef:
+          name: watsonx-creds
+        models:
+          - name: ibm/granite-3-8b-instruct
+    defaultModel: ibm/granite-3-8b-instruct
+    defaultProvider: watsonx
+  ols:
+    defaultModel: ibm/granite-3-8b-instruct
+    defaultProvider: watsonx
+    logLevel: INFO

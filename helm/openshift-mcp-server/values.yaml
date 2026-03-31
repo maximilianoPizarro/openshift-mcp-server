@@ -1,0 +1,42 @@
+replicaCount: 1
+
+image:
+  repository: quay.io/maximilianopizarro/openshift-mcp-server
+  tag: latest
+  pullPolicy: Always
+
+namespace: openshift-lightspeed
+
+service:
+  type: ClusterIP
+  port: 8080
+
+resources:
+  limits:
+    cpu: "1"
+    memory: 512Mi
+  requests:
+    cpu: 200m
+    memory: 256Mi
+
+health:
+  readinessPath: /q/health/ready
+  livenessPath: /q/health/live
+  startupPath: /q/health/started
+
+serviceAccount:
+  create: true
+  name: openshift-mcp-server
+  clusterRole: cluster-admin
+
+inspector:
+  enabled: false
+  image: ghcr.io/nicholasgriffintn/mcp-inspector:latest
+  port: 6274
+
+olsConfig:
+  enabled: false
+  llmProvider: watsonx
+  modelId: ibm/granite-3-8b-instruct
+  url: https://us-south.ml.cloud.ibm.com
+  credentialsSecretName: watsonx-creds
