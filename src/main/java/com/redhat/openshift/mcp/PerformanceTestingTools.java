@@ -20,11 +20,13 @@ public class PerformanceTestingTools {
             + "Supports create, cleanup, or both operations.")
     String runKubeBurner(
             @ToolArg(description = "Type of test: cluster-density-v2, node-density, pvc-density, crd-scale") String testType,
-            @ToolArg(description = "Number of test iterations (1-100, default 5)") int iterations,
+            @ToolArg(description = "Number of test iterations (1-100, default 5)") String iterationsStr,
             @ToolArg(description = "Namespace for test resources (default: kube-burner-test)") String namespace,
             @ToolArg(description = "Operation: create, cleanup, or both (default: create)") String operation
     ) {
         if (testType == null || testType.isBlank()) testType = "cluster-density-v2";
+        int iterations = 5;
+        try { iterations = Integer.parseInt(iterationsStr); } catch (Exception ignored) {}
         if (iterations <= 0) iterations = 5;
         if (iterations > 100) iterations = 100;
         if (namespace == null || namespace.isBlank()) namespace = "kube-burner-test";
@@ -177,11 +179,13 @@ public class PerformanceTestingTools {
     String runNetworkTest(
             @ToolArg(description = "Type of test: throughput, latency, packet-loss") String testType,
             @ToolArg(description = "Test duration (default: 30s)") String duration,
-            @ToolArg(description = "Number of parallel streams (default: 1)") int parallel,
+            @ToolArg(description = "Number of parallel streams (default: 1)") String parallelStr,
             @ToolArg(description = "Network protocol: tcp, udp (default: tcp)") String protocol
     ) {
         if (testType == null || testType.isBlank()) testType = "throughput";
         if (duration == null || duration.isBlank()) duration = "30s";
+        int parallel = 1;
+        try { parallel = Integer.parseInt(parallelStr); } catch (Exception ignored) {}
         if (parallel <= 0) parallel = 1;
         if (protocol == null || protocol.isBlank()) protocol = "tcp";
 
@@ -237,11 +241,13 @@ public class PerformanceTestingTools {
     String runCpuStressTest(
             @ToolArg(description = "Type of test: cpu, memory, combined") String testType,
             @ToolArg(description = "Test duration (default: 2m)") String duration,
-            @ToolArg(description = "Number of CPU cores to stress (default: 2)") int cpuCores,
+            @ToolArg(description = "Number of CPU cores to stress (default: 2)") String cpuCoresStr,
             @ToolArg(description = "Amount of memory to stress (default: 1G)") String memorySize
     ) {
         if (testType == null || testType.isBlank()) testType = "combined";
         if (duration == null || duration.isBlank()) duration = "2m";
+        int cpuCores = 2;
+        try { cpuCores = Integer.parseInt(cpuCoresStr); } catch (Exception ignored) {}
         if (cpuCores <= 0) cpuCores = 2;
         if (memorySize == null || memorySize.isBlank()) memorySize = "1G";
 
@@ -295,12 +301,15 @@ public class PerformanceTestingTools {
     String runDatabaseBenchmark(
             @ToolArg(description = "Database type: postgresql, mysql") String dbType,
             @ToolArg(description = "Type of test: oltp_read_write, oltp_read_only, oltp_write_only") String testType,
-            @ToolArg(description = "Number of test threads (default: 10)") int threads,
+            @ToolArg(description = "Number of test threads (default: 10)") String threadsStr,
             @ToolArg(description = "Test duration (default: 60s)") String duration,
-            @ToolArg(description = "Number of rows in test tables (default: 100000)") int tableSize
+            @ToolArg(description = "Number of rows in test tables (default: 100000)") String tableSizeStr
     ) {
         if (dbType == null || dbType.isBlank()) return "Error: dbType is required (postgresql or mysql)";
         if (testType == null || testType.isBlank()) testType = "oltp_read_write";
+        int threads = 10, tableSize = 100000;
+        try { threads = Integer.parseInt(threadsStr); } catch (Exception ignored) {}
+        try { tableSize = Integer.parseInt(tableSizeStr); } catch (Exception ignored) {}
         if (threads <= 0) threads = 10;
         if (duration == null || duration.isBlank()) duration = "60s";
         if (tableSize <= 0) tableSize = 100000;

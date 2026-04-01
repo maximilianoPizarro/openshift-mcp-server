@@ -153,10 +153,16 @@ public class ClusterMonitoringTools {
     @Tool(description = "Detect pods and nodes with resource allocation or utilization issues. "
             + "Checks for high CPU/memory usage and excessive container restarts.")
     String detectResourceIssues(
-            @ToolArg(description = "CPU threshold percentage (default 80)") int cpuThreshold,
-            @ToolArg(description = "Memory threshold percentage (default 85)") int memoryThreshold,
-            @ToolArg(description = "Restart count threshold (default 5)") int restartThreshold
+            @ToolArg(description = "CPU threshold percentage (default 80)") String cpuThresholdStr,
+            @ToolArg(description = "Memory threshold percentage (default 85)") String memoryThresholdStr,
+            @ToolArg(description = "Restart count threshold (default 5)") String restartThresholdStr
     ) {
+        int cpuThreshold = 80;
+        int memoryThreshold = 85;
+        int restartThreshold = 5;
+        try { cpuThreshold = Integer.parseInt(cpuThresholdStr); } catch (Exception ignored) {}
+        try { memoryThreshold = Integer.parseInt(memoryThresholdStr); } catch (Exception ignored) {}
+        try { restartThreshold = Integer.parseInt(restartThresholdStr); } catch (Exception ignored) {}
         if (cpuThreshold <= 0) cpuThreshold = 80;
         if (memoryThreshold <= 0) memoryThreshold = 85;
         if (restartThreshold <= 0) restartThreshold = 5;
@@ -220,8 +226,10 @@ public class ClusterMonitoringTools {
             + "and recent container restarts from cluster events.")
     String analyzePodDisruptions(
             @ToolArg(description = "Namespace to analyze (leave empty for all)") String namespace,
-            @ToolArg(description = "Number of hours to look back (default 24)") int hours
+            @ToolArg(description = "Number of hours to look back (default 24)") String hoursStr
     ) {
+        int hours = 24;
+        try { hours = Integer.parseInt(hoursStr); } catch (Exception ignored) {}
         if (hours <= 0) hours = 24;
 
         try {
@@ -394,9 +402,11 @@ public class ClusterMonitoringTools {
     @Tool(description = "Check kubelet service status and recent logs for errors on cluster nodes. "
             + "Uses oc debug to access node journals.")
     String checkKubeletStatus(
-            @ToolArg(description = "Number of hours to look back for logs (default 24)") int hoursBack,
+            @ToolArg(description = "Number of hours to look back for logs (default 24)") String hoursBackStr,
             @ToolArg(description = "Include system-level errors in analysis") boolean includeSystemErrors
     ) {
+        int hoursBack = 24;
+        try { hoursBack = Integer.parseInt(hoursBackStr); } catch (Exception ignored) {}
         if (hoursBack <= 0) hoursBack = 24;
 
         try {
@@ -453,9 +463,11 @@ public class ClusterMonitoringTools {
     @Tool(description = "Check CRI-O container runtime status and recent logs on cluster nodes. "
             + "Uses oc debug to access node journals.")
     String checkCrioStatus(
-            @ToolArg(description = "Number of hours to look back for logs (default 24)") int hoursBack,
+            @ToolArg(description = "Number of hours to look back for logs (default 24)") String hoursBackStr,
             @ToolArg(description = "Include container-level errors in analysis") boolean includeContainerErrors
     ) {
+        int hoursBack = 24;
+        try { hoursBack = Integer.parseInt(hoursBackStr); } catch (Exception ignored) {}
         if (hoursBack <= 0) hoursBack = 24;
 
         try {
@@ -513,9 +525,11 @@ public class ClusterMonitoringTools {
             + "Uses oc debug to access node journals with filtering by pod, service, and error types.")
     String analyzeJournalctlPodErrors(
             @ToolArg(description = "Specific pod name to analyze (leave empty for all)") String pod,
-            @ToolArg(description = "Number of hours to look back (default 24)") int hoursBack,
+            @ToolArg(description = "Number of hours to look back (default 24)") String hoursBackStr,
             @ToolArg(description = "Specific service to analyze e.g. kubelet, crio (leave empty for all)") String service
     ) {
+        int hoursBack = 24;
+        try { hoursBack = Integer.parseInt(hoursBackStr); } catch (Exception ignored) {}
         if (hoursBack <= 0) hoursBack = 24;
 
         try {

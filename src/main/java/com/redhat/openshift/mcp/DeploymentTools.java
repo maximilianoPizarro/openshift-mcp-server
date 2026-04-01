@@ -28,16 +28,20 @@ public class DeploymentTools {
             @ToolArg(description = "Deployment name") String name,
             @ToolArg(description = "Container image") String image,
             @ToolArg(description = "Target namespace (default: default)") String namespace,
-            @ToolArg(description = "Number of replicas (default: 1)") int replicas,
+            @ToolArg(description = "Number of replicas (default: 1)") String replicasStr,
             @ToolArg(description = "CPU request (default: 100m)") String cpuRequest,
             @ToolArg(description = "Memory request (default: 128Mi)") String memoryRequest,
             @ToolArg(description = "CPU limit (default: 500m)") String cpuLimit,
             @ToolArg(description = "Memory limit (default: 512Mi)") String memoryLimit,
-            @ToolArg(description = "Container port (default: 8080)") int containerPort
+            @ToolArg(description = "Container port (default: 8080)") String containerPortStr
     ) {
         if (name == null || name.isBlank()) return "Error: name is required";
         if (image == null || image.isBlank()) return "Error: image is required";
         if (namespace == null || namespace.isBlank()) namespace = "default";
+        int replicas = 1;
+        int containerPort = 8080;
+        try { replicas = Integer.parseInt(replicasStr); } catch (Exception ignored) {}
+        try { containerPort = Integer.parseInt(containerPortStr); } catch (Exception ignored) {}
         if (replicas <= 0) replicas = 1;
         if (cpuRequest == null || cpuRequest.isBlank()) cpuRequest = "100m";
         if (memoryRequest == null || memoryRequest.isBlank()) memoryRequest = "128Mi";
@@ -201,13 +205,18 @@ public class DeploymentTools {
     String createHpa(
             @ToolArg(description = "Target deployment name") String targetDeployment,
             @ToolArg(description = "Target namespace (default: default)") String namespace,
-            @ToolArg(description = "Minimum number of replicas (default: 1)") int minReplicas,
-            @ToolArg(description = "Maximum number of replicas (default: 10)") int maxReplicas,
-            @ToolArg(description = "Target CPU utilization percentage (default: 70)") int cpuTarget,
-            @ToolArg(description = "Target memory utilization percentage (default: 80)") int memoryTarget
+            @ToolArg(description = "Minimum number of replicas (default: 1)") String minReplicasStr,
+            @ToolArg(description = "Maximum number of replicas (default: 10)") String maxReplicasStr,
+            @ToolArg(description = "Target CPU utilization percentage (default: 70)") String cpuTargetStr,
+            @ToolArg(description = "Target memory utilization percentage (default: 80)") String memoryTargetStr
     ) {
         if (targetDeployment == null || targetDeployment.isBlank()) return "Error: targetDeployment is required";
         if (namespace == null || namespace.isBlank()) namespace = "default";
+        int minReplicas = 1, maxReplicas = 10, cpuTarget = 70, memoryTarget = 80;
+        try { minReplicas = Integer.parseInt(minReplicasStr); } catch (Exception ignored) {}
+        try { maxReplicas = Integer.parseInt(maxReplicasStr); } catch (Exception ignored) {}
+        try { cpuTarget = Integer.parseInt(cpuTargetStr); } catch (Exception ignored) {}
+        try { memoryTarget = Integer.parseInt(memoryTargetStr); } catch (Exception ignored) {}
         if (minReplicas <= 0) minReplicas = 1;
         if (maxReplicas <= 0) maxReplicas = 10;
         if (cpuTarget <= 0) cpuTarget = 70;
@@ -271,14 +280,17 @@ public class DeploymentTools {
             @ToolArg(description = "Target namespace (default: default)") String namespace,
             @ToolArg(description = "Pod selector label key (e.g. 'app')") String selectorKey,
             @ToolArg(description = "Pod selector label value") String selectorValue,
-            @ToolArg(description = "Service port") int port,
-            @ToolArg(description = "Target port on pods") int targetPort,
+            @ToolArg(description = "Service port") String portStr,
+            @ToolArg(description = "Target port on pods") String targetPortStr,
             @ToolArg(description = "Service type: ClusterIP, NodePort, LoadBalancer (default: ClusterIP)") String serviceType
     ) {
         if (name == null || name.isBlank()) return "Error: name is required";
         if (namespace == null || namespace.isBlank()) namespace = "default";
         if (selectorKey == null || selectorKey.isBlank()) selectorKey = "app";
         if (selectorValue == null || selectorValue.isBlank()) return "Error: selectorValue is required";
+        int port = 80, targetPort = 80;
+        try { port = Integer.parseInt(portStr); } catch (Exception ignored) {}
+        try { targetPort = Integer.parseInt(targetPortStr); } catch (Exception ignored) { targetPort = port; }
         if (port <= 0) port = 80;
         if (targetPort <= 0) targetPort = port;
         if (serviceType == null || serviceType.isBlank()) serviceType = "ClusterIP";
