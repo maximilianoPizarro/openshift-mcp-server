@@ -4,10 +4,12 @@ kind: Deployment
 metadata:
   name: {{ include "openshift-mcp-server.fullname" . }}-k8s-mcp
   namespace: {{ .Values.namespace }}
+  annotations:
+    app.openshift.io/runtime-image: {{ .Chart.Icon }}
   labels:
     {{- include "openshift-mcp-server.labels" . | nindent 4 }}
     app.kubernetes.io/component: k8s-mcp
-    app.openshift.io/runtime: golang
+    app.openshift.io/runtime: openshift
 spec:
   replicas: 1
   selector:

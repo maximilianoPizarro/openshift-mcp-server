@@ -3,9 +3,11 @@ kind: Deployment
 metadata:
   name: {{ include "openshift-mcp-server.fullname" . }}
   namespace: {{ .Values.namespace }}
+  annotations:
+    app.openshift.io/runtime-image: {{ .Chart.Icon }}
   labels:
     {{- include "openshift-mcp-server.labels" . | nindent 4 }}
-    app.openshift.io/runtime: quarkus
+    app.openshift.io/runtime: openshift
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
