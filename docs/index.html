@@ -167,47 +167,65 @@ helm repo update</code></pre>
     <div class="cards">
       <div class="card" style="flex:1 1 100%;max-width:100%">
         <h3>OpenShift Topology View</h3>
-        <img src="{{ site.baseurl }}/topology-view.png" alt="OpenShift Topology View" style="width:100%;border-radius:6px;border:1px solid #333">
+        <a href="{{ site.baseurl }}/topology-view.png" class="screenshot-link" data-caption="MCP Server pods running in the openshift-lightspeed namespace with OpenShift logos">
+          <img src="{{ site.baseurl }}/topology-view.png" alt="OpenShift Topology View" style="width:100%;border-radius:6px;border:1px solid #333">
+        </a>
         <p style="margin-top:8px;font-size:0.85em;color:#999">MCP Server pods running in the openshift-lightspeed namespace with OpenShift logos</p>
       </div>
       <div class="card" style="flex:1 1 100%;max-width:100%">
         <h3>Lightspeed Tool Calling</h3>
-        <img src="{{ site.baseurl }}/lightspeed-response.png" alt="Lightspeed Tool Response" style="width:100%;border-radius:6px;border:1px solid #333">
+        <a href="{{ site.baseurl }}/lightspeed-response.png" class="screenshot-link" data-caption="Qwen3 8B model reasoning about which MCP tool to call (checkClusterHealth)">
+          <img src="{{ site.baseurl }}/lightspeed-response.png" alt="Lightspeed Tool Response" style="width:100%;border-radius:6px;border:1px solid #333">
+        </a>
         <p style="margin-top:8px;font-size:0.85em;color:#999">Qwen3 8B model reasoning about which MCP tool to call (checkClusterHealth)</p>
       </div>
       <div class="card" style="flex:1 1 100%;max-width:100%">
         <h3>Cluster Health Analysis</h3>
-        <img src="{{ site.baseurl }}/lightspeed-cluster-health.png" alt="Cluster Health Analysis" style="width:100%;border-radius:6px;border:1px solid #333">
+        <a href="{{ site.baseurl }}/lightspeed-cluster-health.png" class="screenshot-link" data-caption="Lightspeed analyzing failed pods and high-restart containers using checkClusterHealth tool results">
+          <img src="{{ site.baseurl }}/lightspeed-cluster-health.png" alt="Cluster Health Analysis" style="width:100%;border-radius:6px;border:1px solid #333">
+        </a>
         <p style="margin-top:8px;font-size:0.85em;color:#999">Lightspeed analyzing failed pods and high-restart containers using checkClusterHealth tool results</p>
       </div>
       <div class="card" style="flex:1 1 100%;max-width:100%">
         <h3>List Pods (pods_list)</h3>
-        <img src="{{ site.baseurl }}/test-list-pods.png" alt="List Pods" style="width:100%;border-radius:6px;border:1px solid #333">
+        <a href="{{ site.baseurl }}/test-list-pods.png" class="screenshot-link" data-caption="Listing pods in openshift-lightspeed namespace using the pods_list_in_namespace tool">
+          <img src="{{ site.baseurl }}/test-list-pods.png" alt="List Pods" style="width:100%;border-radius:6px;border:1px solid #333">
+        </a>
         <p style="margin-top:8px;font-size:0.85em;color:#999">Listing pods in openshift-lightspeed namespace using the pods_list_in_namespace tool</p>
       </div>
       <div class="card" style="flex:1 1 100%;max-width:100%">
         <h3>Detect Resource Issues</h3>
-        <img src="{{ site.baseurl }}/pods-with-high-cpu-memory.png" alt="Detect Resource Issues" style="width:100%;border-radius:6px;border:1px solid #333">
+        <a href="{{ site.baseurl }}/pods-with-high-cpu-memory.png" class="screenshot-link" data-caption="detectResourceIssues tool identifying pods with excessive restarts and high resource consumption">
+          <img src="{{ site.baseurl }}/pods-with-high-cpu-memory.png" alt="Detect Resource Issues" style="width:100%;border-radius:6px;border:1px solid #333">
+        </a>
         <p style="margin-top:8px;font-size:0.85em;color:#999">detectResourceIssues tool identifying pods with excessive restarts and high resource consumption</p>
       </div>
       <div class="card" style="flex:1 1 100%;max-width:100%">
         <h3>Deploy Redis Database</h3>
-        <img src="{{ site.baseurl }}/deploy-redis.png" alt="Deploy Redis" style="width:100%;border-radius:6px;border:1px solid #333">
+        <a href="{{ site.baseurl }}/deploy-redis.png" class="screenshot-link" data-caption="deployDatabase tool deploying a Redis instance using official RHEL catalog image">
+          <img src="{{ site.baseurl }}/deploy-redis.png" alt="Deploy Redis" style="width:100%;border-radius:6px;border:1px solid #333">
+        </a>
         <p style="margin-top:8px;font-size:0.85em;color:#999">deployDatabase tool deploying a Redis instance using official RHEL catalog image</p>
       </div>
       <div class="card" style="flex:1 1 100%;max-width:100%">
         <h3>Create HPA (Horizontal Pod Autoscaler)</h3>
-        <img src="{{ site.baseurl }}/create-hpa.png" alt="Create HPA" style="width:100%;border-radius:6px;border:1px solid #333">
+        <a href="{{ site.baseurl }}/create-hpa.png" class="screenshot-link" data-caption="createHpa tool configuring auto-scaling with CPU/memory targets">
+          <img src="{{ site.baseurl }}/create-hpa.png" alt="Create HPA" style="width:100%;border-radius:6px;border:1px solid #333">
+        </a>
         <p style="margin-top:8px;font-size:0.85em;color:#999">createHpa tool configuring auto-scaling with CPU/memory targets</p>
       </div>
       <div class="card" style="flex:1 1 100%;max-width:100%">
         <h3>Helm List Releases</h3>
-        <img src="{{ site.baseurl }}/helm_list.png" alt="Helm List" style="width:100%;border-radius:6px;border:1px solid #333">
+        <a href="{{ site.baseurl }}/helm_list.png" class="screenshot-link" data-caption="helm_list tool showing all Helm releases across namespaces">
+          <img src="{{ site.baseurl }}/helm_list.png" alt="Helm List" style="width:100%;border-radius:6px;border:1px solid #333">
+        </a>
         <p style="margin-top:8px;font-size:0.85em;color:#999">helm_list tool showing all Helm releases across namespaces</p>
       </div>
       <div class="card" style="flex:1 1 100%;max-width:100%">
         <h3>Helm Chart in OpenShift Catalog</h3>
-        <img src="{{ site.baseurl }}/helm-catalog.png" alt="Helm Chart Catalog" style="width:100%;border-radius:6px;border:1px solid #333">
+        <a href="{{ site.baseurl }}/helm-catalog.png" class="screenshot-link" data-caption="OpenShift MCP Server Helm Chart available in the OpenShift Developer Catalog via HelmChartRepository">
+          <img src="{{ site.baseurl }}/helm-catalog.png" alt="Helm Chart Catalog" style="width:100%;border-radius:6px;border:1px solid #333">
+        </a>
         <p style="margin-top:8px;font-size:0.85em;color:#999">OpenShift MCP Server Helm Chart available in the OpenShift Developer Catalog via HelmChartRepository</p>
       </div>
     </div>
@@ -265,3 +283,41 @@ spec:
   </section>
 
 </div>
+
+<div id="lightbox" class="lightbox-overlay">
+  <span class="lightbox-close">&times;</span>
+  <img id="lightbox-img" src="" alt="">
+  <div id="lightbox-caption" class="lightbox-caption"></div>
+</div>
+
+<script>
+(function() {
+  var overlay = document.getElementById('lightbox');
+  var lbImg = document.getElementById('lightbox-img');
+  var lbCaption = document.getElementById('lightbox-caption');
+  var lbClose = document.querySelector('.lightbox-close');
+
+  document.querySelectorAll('.screenshot-link').forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      lbImg.src = this.href;
+      lbCaption.textContent = this.getAttribute('data-caption') || '';
+      overlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    });
+  });
+
+  function close() {
+    overlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  overlay.addEventListener('click', function(e) {
+    if (e.target === overlay || e.target === lbClose) close();
+  });
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') close();
+  });
+})();
+</script>
