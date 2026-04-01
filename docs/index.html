@@ -1,0 +1,211 @@
+---
+layout: default
+title: OpenShift MCP Server
+---
+
+<section class="hero">
+  <div class="hero-content">
+    <img src="{{ site.baseurl }}/openshift-logo.png" alt="OpenShift">
+    <h2>OpenShift MCP Server</h2>
+    <p>Enterprise MCP Server for OpenShift Lightspeed. Dual server deployment combining custom operational tools with the official Kubernetes MCP server.</p>
+    <div class="badge-row">
+      <span class="badge badge-red">Quarkus</span>
+      <span class="badge badge-blue">MCP Protocol</span>
+      <span class="badge badge-dark">40+ Tools</span>
+      <span class="badge badge-green">Helm Chart</span>
+    </div>
+    <div class="install-box">
+      <div class="label">Install via Helm</div>
+      <code>helm repo add openshift-mcp https://maximilianoPizarro.github.io/openshift-mcp-server/charts</code><br>
+      <code>helm install openshift-mcp-server openshift-mcp/openshift-mcp-server -n openshift-lightspeed</code>
+    </div>
+  </div>
+</section>
+
+<div class="main">
+
+  <section>
+    <h2>Architecture</h2>
+    <div class="cards">
+      <div class="card">
+        <h3><span class="icon icon-red">Q</span> Quarkus MCP Server</h3>
+        <p>Custom Java server with 19 operational tools for monitoring, deployment, and performance testing. Built with Fabric8 Kubernetes Client.</p>
+        <ul>
+          <li>checkClusterHealth</li>
+          <li>getPerformanceMetrics</li>
+          <li>createDeployment</li>
+          <li>deployDatabase</li>
+          <li>runKubeBurner</li>
+          <li>+ 14 more tools</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3><span class="icon icon-blue">K</span> Kubernetes MCP Server</h3>
+        <p>Official Go-based server from <a href="https://github.com/openshift/openshift-mcp-server">openshift/openshift-mcp-server</a>. Generic CRUD, pod management, Helm operations.</p>
+        <ul>
+          <li>resources_list / get / create / delete</li>
+          <li>pods_exec / pods_log</li>
+          <li>helm_install / helm_list</li>
+          <li>events_list / namespaces_list</li>
+          <li>nodes_top / pods_top</li>
+          <li>+ 10 more tools</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3><span class="icon icon-green">+</span> Supporting Services</h3>
+        <p>Included in the Helm chart for a complete AI-assisted operations stack.</p>
+        <ul>
+          <li>MCP Inspector (testing UI)</li>
+          <li>LiteLLM Proxy (OpenAI compat)</li>
+          <li>PostgreSQL (LiteLLM backend)</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Helm Chart</h2>
+    <table>
+      <thead>
+        <tr><th>Version</th><th>App Version</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>1.0.0</code></td><td><code>1.0.0</code></td><td>Dual MCP server + Inspector + LiteLLM</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Add the Helm Repository</h3>
+    <pre><code>helm repo add openshift-mcp https://maximilianoPizarro.github.io/openshift-mcp-server/charts
+helm repo update</code></pre>
+
+    <h3>Install</h3>
+    <pre><code>helm install openshift-mcp-server openshift-mcp/openshift-mcp-server \
+  --namespace openshift-lightspeed \
+  --set namespace=openshift-lightspeed \
+  --set serviceAccount.create=true</code></pre>
+
+    <h3>Configure with an existing RHOAI model</h3>
+    <pre><code>helm install openshift-mcp-server openshift-mcp/openshift-mcp-server \
+  --namespace openshift-lightspeed \
+  --set namespace=openshift-lightspeed \
+  --set litellm.model.name=llama-32-3b-instruct \
+  --set litellm.model.modelId=llama-32-3b-instruct \
+  --set litellm.model.apiBase=http://llama-32-3b-instruct-openai.my-first-model.svc.cluster.local/v1</code></pre>
+  </section>
+
+  <section>
+    <h2>Custom Tools (Quarkus Server)</h2>
+
+    <h3>Monitoring (9 tools)</h3>
+    <table>
+      <thead>
+        <tr><th>Tool</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>checkClusterHealth</code></td><td>Overall cluster health, node/pod status, critical issues</td></tr>
+        <tr><td><code>getPerformanceMetrics</code></td><td>Node and pod CPU/memory metrics</td></tr>
+        <tr><td><code>detectResourceIssues</code></td><td>Pods with high CPU/memory or excessive restarts</td></tr>
+        <tr><td><code>analyzePodDisruptions</code></td><td>Evictions, OOM kills, restart patterns</td></tr>
+        <tr><td><code>checkNodeConditions</code></td><td>Node conditions, taints, allocatable resources</td></tr>
+        <tr><td><code>monitorDeployments</code></td><td>Deployment rollout health and replica status</td></tr>
+        <tr><td><code>checkKubeletStatus</code></td><td>Kubelet service status and journal logs</td></tr>
+        <tr><td><code>checkCrioStatus</code></td><td>CRI-O container runtime status</td></tr>
+        <tr><td><code>analyzeJournalctlPodErrors</code></td><td>Journal log analysis with filters</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Deployment (5 tools)</h3>
+    <table>
+      <thead>
+        <tr><th>Tool</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>createDeployment</code></td><td>Create deployments with custom config</td></tr>
+        <tr><td><code>deployDatabase</code></td><td>Deploy PostgreSQL/MySQL/MongoDB/Redis (RHEL images)</td></tr>
+        <tr><td><code>createHpa</code></td><td>Configure horizontal pod autoscalers</td></tr>
+        <tr><td><code>createService</code></td><td>Create ClusterIP/NodePort/LoadBalancer services</td></tr>
+        <tr><td><code>createNetworkPolicy</code></td><td>Create network policies</td></tr>
+      </tbody>
+    </table>
+
+    <h3>Performance Testing (5 tools)</h3>
+    <table>
+      <thead>
+        <tr><th>Tool</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><code>runKubeBurner</code></td><td>Cluster density testing</td></tr>
+        <tr><td><code>runStorageBenchmark</code></td><td>Storage I/O benchmarks with FIO</td></tr>
+        <tr><td><code>runNetworkTest</code></td><td>Network throughput with iperf3</td></tr>
+        <tr><td><code>runCpuStressTest</code></td><td>CPU/memory stress testing</td></tr>
+        <tr><td><code>runDatabaseBenchmark</code></td><td>Database benchmarks</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Kubernetes MCP Tools (Official Server)</h2>
+    <table>
+      <thead>
+        <tr><th>Toolset</th><th>Tools</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>Config</strong></td><td><code>configuration_contexts_list</code>, <code>targets_list</code>, <code>configuration_view</code></td></tr>
+        <tr><td><strong>Core</strong></td><td><code>resources_list</code>, <code>resources_get</code>, <code>resources_create_or_update</code>, <code>resources_delete</code>, <code>resources_scale</code>, <code>pods_list</code>, <code>pods_get</code>, <code>pods_delete</code>, <code>pods_top</code>, <code>pods_exec</code>, <code>pods_log</code>, <code>pods_run</code>, <code>namespaces_list</code>, <code>projects_list</code>, <code>events_list</code>, <code>nodes_top</code>, <code>nodes_log</code></td></tr>
+        <tr><td><strong>Helm</strong></td><td><code>helm_install</code>, <code>helm_list</code>, <code>helm_uninstall</code></td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>OLSConfig Integration</h2>
+    <pre><code>apiVersion: ols.openshift.io/v1alpha1
+kind: OLSConfig
+metadata:
+  name: cluster
+spec:
+  featureGates:
+    - MCPServer
+  mcpServers:
+    - name: openshift-mcp-server
+      timeout: 30
+      url: 'http://openshift-mcp-server.openshift-lightspeed.svc.cluster.local:8080/mcp'
+    - name: kubernetes-mcp-server
+      timeout: 30
+      url: 'http://openshift-mcp-server-k8s-mcp.openshift-lightspeed.svc.cluster.local:8085/mcp'</code></pre>
+  </section>
+
+  <section>
+    <h2>Technology Stack</h2>
+    <table>
+      <thead>
+        <tr><th>Component</th><th>Technology</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Custom MCP Server</td><td>Quarkus 3.27.3 + Fabric8 Kubernetes Client</td></tr>
+        <tr><td>Official MCP Server</td><td>Go (<a href="https://github.com/openshift/openshift-mcp-server">openshift/openshift-mcp-server</a>)</td></tr>
+        <tr><td>MCP Protocol</td><td>Streamable HTTP (POST /mcp)</td></tr>
+        <tr><td>Container Runtime</td><td>UBI9 OpenJDK 21 Runtime</td></tr>
+        <tr><td>Helm Chart</td><td>v2 with 5 deployments</td></tr>
+        <tr><td>LLM Integration</td><td>LiteLLM proxy (OpenAI compatible)</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <section>
+    <h2>Helm Chart Components</h2>
+    <table>
+      <thead>
+        <tr><th>Component</th><th>Image</th><th>Port</th><th>Description</th></tr>
+      </thead>
+      <tbody>
+        <tr><td><strong>openshift-mcp-server</strong></td><td><code>quay.io/maximilianopizarro/openshift-mcp-server</code></td><td>8080</td><td>Custom Quarkus MCP</td></tr>
+        <tr><td><strong>kubernetes-mcp-server</strong></td><td><code>quay.io/redhat-user-workloads/.../openshift-mcp-server</code></td><td>8085</td><td>Official K8s MCP</td></tr>
+        <tr><td><strong>mcp-inspector</strong></td><td><code>mcpuse/inspector</code></td><td>8080</td><td>MCP testing UI</td></tr>
+        <tr><td><strong>litellm</strong></td><td><code>litellm/litellm-non_root</code></td><td>4000</td><td>OpenAI-compatible proxy</td></tr>
+        <tr><td><strong>litellm-db</strong></td><td><code>registry.redhat.io/rhel9/postgresql-15</code></td><td>5432</td><td>PostgreSQL backend</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+</div>
