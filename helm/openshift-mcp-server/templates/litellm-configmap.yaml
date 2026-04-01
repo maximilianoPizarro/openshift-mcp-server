@@ -17,11 +17,8 @@ data:
           api_key: os.environ/MODEL_API_KEY
           ssl_verify: false
           drop_params: true
-          additional_drop_params:
-            - tool_choice
-            - tools
         model_info:
-          supports_function_calling: false
+          supports_function_calling: true
 
     mcp_servers:
       openshift_mcp_server:

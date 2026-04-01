@@ -83,9 +83,9 @@ litellm:
   masterKey: "sk-openshift-mcp-1234"
   model:
     name: qwen3
-    modelId: isvc-qwen3-8b-fp8
-    apiBase: "https://isvc-qwen3-8b-fp8-predictor.sandbox-shared-models.svc.cluster.local:8443/v1"
-    apiKey: ""
+    modelId: isvc-qwen3-8b
+    apiBase: "http://isvc-qwen3-8b-predictor.qwen3-model.svc.cluster.local:8080/v1"
+    apiKey: "dummy"
   postgres:
     enabled: true
     image:
