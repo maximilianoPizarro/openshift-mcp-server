@@ -6,7 +6,7 @@ entries:
       artifacthub.io/license: Apache-2.0
     apiVersion: v2
     appVersion: 1.0.0
-    created: "2026-03-31T22:04:41.071019-03:00"
+    created: "2026-03-31T22:12:24.8609488-03:00"
     description: Enterprise MCP Server for OpenShift Lightspeed - cluster monitoring,
       deployment management, and performance testing
     digest: dabf99c1842b28618cc62c2f4435f71a2317683b60d0f1649b171c118e162f97
@@ -25,6 +25,6 @@ entries:
     - https://github.com/maximilianoPizarro/openshift-mcp-server
     type: application
     urls:
-    - https://maximilianoPizarro.github.io/openshift-mcp-server/charts/openshift-mcp-server-1.0.0.tgz
+    - https://maximilianoPizarro.github.io/openshift-mcp-server/openshift-mcp-server-1.0.0.tgz
     version: 1.0.0
-generated: "2026-03-31T22:04:41.0699525-03:00"
+generated: "2026-03-31T22:12:24.859924-03:00"

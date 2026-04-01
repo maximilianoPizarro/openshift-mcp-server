@@ -42,4 +42,4 @@ node_modules/
 
 # Helm packages (except docs/charts for GitHub Pages Helm repo)
 *.tgz
-!docs/charts/*.tgz
+!docs/*.tgz
