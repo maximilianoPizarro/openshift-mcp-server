@@ -92,3 +92,30 @@ OpenShift MCP Server deployed successfully!
    helm upgrade {{ .Release.Name }} ./helm/openshift-mcp-server \
      --set litellm.model.apiKey=$(oc whoami -t)
 {{- end }}
+
+8. Example prompts for OpenShift Lightspeed:
+
+   Monitoring:
+     "Check the cluster health and report any issues"
+     "Show me performance metrics for all nodes"
+     "Are there any pods with excessive restarts?"
+     "What node conditions are degraded?"
+     "Monitor deployments in namespace my-app"
+
+   Deployment:
+     "Deploy a PostgreSQL database called mydb in namespace dev"
+     "Create an HPA for deployment nginx with min 2 max 10 replicas"
+     "Create a ClusterIP service for deployment api on port 8080"
+
+   Kubernetes Operations:
+     "List all pods in namespace openshift-lightspeed"
+     "Show logs for pod openshift-mcp-server in namespace openshift-lightspeed"
+     "Get events in namespace default"
+     "List all namespaces in the cluster"
+     "Scale deployment nginx to 3 replicas in namespace dev"
+     "List all helm releases"
+
+   Performance Testing:
+     "Run a storage benchmark in namespace perf-test"
+     "Run a CPU stress test with 4 workers"
+

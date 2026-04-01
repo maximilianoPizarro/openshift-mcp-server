@@ -20,7 +20,7 @@ spec:
         app.kubernetes.io/component: k8s-mcp
         app.openshift.io/runtime: golang
     spec:
-      serviceAccountName: {{ .Values.kubernetesMcp.serviceAccount.name | default "default" }}
+      serviceAccountName: {{ .Values.kubernetesMcp.serviceAccount.name | default .Values.serviceAccount.name | default "default" }}
       volumes:
         - name: config
           configMap:
