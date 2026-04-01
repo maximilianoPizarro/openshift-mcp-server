@@ -25,11 +25,9 @@ spec:
         - name: config
           configMap:
             name: {{ include "openshift-mcp-server.fullname" . }}-k8s-mcp
-        - name: helm-cache
-          emptyDir: {}
-        - name: helm-config
-          emptyDir: {}
         - name: tmp
+          emptyDir: {}
+        - name: helm-data
           emptyDir: {}
       containers:
         - name: kubernetes-mcp-server
@@ -48,10 +46,17 @@ spec:
               value: /tmp/helm/data
           volumeMounts:
             - name: config
-              mountPath: /etc/k8s-mcp
+              mountPath: /etc/k8s-mcp/config.toml
+              subPath: config.toml
+              readOnly: true
+            - name: config
+              mountPath: /tmp/helm/config/repositories.yaml
+              subPath: repositories.yaml
               readOnly: true
             - name: tmp
-              mountPath: /tmp
+              mountPath: /tmp/helm/cache
+            - name: helm-data
+              mountPath: /tmp/helm/data
           ports:
             - containerPort: {{ .Values.kubernetesMcp.service.port }}
               protocol: TCP
