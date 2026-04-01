@@ -2,7 +2,7 @@ apiVersion: v1
 entries:
   openshift-mcp-server:
   - annotations:
-      artifacthub.io/category: monitoring
+      artifacthub.io/category: ai-machine-learning
       artifacthub.io/changes: |
         - kind: added
           description: 19 MCP tools for cluster monitoring, deployment, and performance testing
@@ -33,13 +33,12 @@ entries:
       artifacthub.io/screenshots: |
         - title: OpenShift MCP Server Architecture
           url: https://maximilianoPizarro.github.io/openshift-mcp-server/openshift-logo.png
-      artifacthub.io/signKey: ""
     apiVersion: v2
     appVersion: 0.1.0-alpha
-    created: "2026-03-31T22:41:09.792665-03:00"
+    created: "2026-03-31T22:46:03.4249507-03:00"
     description: '[EXPERIMENTAL] Enterprise MCP Server for OpenShift Lightspeed -
       cluster monitoring, deployment management, and performance testing'
-    digest: 364ac2a7369f1600ebd1cf1e8e09d2f9de358c1dee4bbdf38ad2fdfbb3e02a0a
+    digest: d3cdeef4df79f9e692d7633c8aa89dde75d6f4c7f1d8abb9f040175a2552baab
     home: https://maximilianoPizarro.github.io/openshift-mcp-server
     icon: https://maximilianoPizarro.github.io/openshift-mcp-server/openshift-logo.png
     keywords:
@@ -66,4 +65,4 @@ entries:
     urls:
     - https://maximilianoPizarro.github.io/openshift-mcp-server/openshift-mcp-server-0.1.0-alpha.tgz
     version: 0.1.0-alpha
-generated: "2026-03-31T22:41:09.7906636-03:00"
+generated: "2026-03-31T22:46:03.4225238-03:00"

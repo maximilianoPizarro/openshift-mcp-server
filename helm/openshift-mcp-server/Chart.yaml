@@ -26,12 +26,11 @@ sources:
   - https://github.com/openshift/openshift-mcp-server
 icon: https://maximilianoPizarro.github.io/openshift-mcp-server/openshift-logo.png
 annotations:
-  artifacthub.io/category: monitoring
+  artifacthub.io/category: ai-machine-learning
   artifacthub.io/license: Apache-2.0
   artifacthub.io/operator: "false"
   artifacthub.io/containsSecurityUpdates: "false"
   artifacthub.io/prerelease: "true"
-  artifacthub.io/signKey: ""
   artifacthub.io/links: |
     - name: Documentation
       url: https://maximilianoPizarro.github.io/openshift-mcp-server
