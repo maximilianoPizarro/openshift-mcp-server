@@ -17,10 +17,11 @@ spec:
       app: {{ include "openshift-mcp-server.fullname" . }}-k8s-mcp
   template:
     metadata:
+      annotations:
+        app.openshift.io/runtime-image: {{ .Chart.Icon }}
       labels:
         app: {{ include "openshift-mcp-server.fullname" . }}-k8s-mcp
         app.kubernetes.io/component: k8s-mcp
-        app.openshift.io/runtime: openshift
     spec:
       serviceAccountName: {{ .Values.serviceAccount.name }}
       volumes:

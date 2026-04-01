@@ -15,9 +15,10 @@ spec:
       {{- include "openshift-mcp-server.selectorLabels" . | nindent 6 }}
   template:
     metadata:
+      annotations:
+        app.openshift.io/runtime-image: {{ .Chart.Icon }}
       labels:
         {{- include "openshift-mcp-server.selectorLabels" . | nindent 8 }}
-        app.openshift.io/runtime: quarkus
     spec:
       {{- if .Values.serviceAccount.create }}
       serviceAccountName: {{ .Values.serviceAccount.name }}
