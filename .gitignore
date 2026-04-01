@@ -43,3 +43,6 @@ node_modules/
 # Helm packages (except docs/charts for GitHub Pages Helm repo)
 *.tgz
 !docs/*.tgz
+
+# Demo videos (local only)
+demo/
