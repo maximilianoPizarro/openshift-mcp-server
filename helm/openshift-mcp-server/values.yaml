@@ -121,7 +121,7 @@ kubernetesMcp:
     port: 8085
   route:
     enabled: true
-  readOnly: true
+  readOnly: false
   toolsets: "core,helm"
   resources:
     requests:
