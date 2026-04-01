@@ -1,44 +1,94 @@
-============================================================
-  OpenShift MCP Server deployed successfully!
-============================================================
+OpenShift MCP Server deployed successfully!
 
-MCP Endpoint (Streamable HTTP):
-  http://{{ include "openshift-mcp-server.fullname" . }}.{{ .Values.namespace }}.svc.cluster.local:{{ .Values.service.port }}/mcp
+1. Check the deployment:
+   oc get pods -n {{ .Values.namespace }} -l app={{ include "openshift-mcp-server.fullname" . }}
 
-IMPORTANT: Use /mcp (Streamable HTTP), not /mcp/sse.
-OLS uses POST requests which require the Streamable HTTP endpoint.
+2. MCP endpoint (Streamable HTTP):
+   http://{{ include "openshift-mcp-server.fullname" . }}.{{ .Values.namespace }}.svc.cluster.local:{{ .Values.service.port }}/mcp
 
-Available MCP Tools (19):
-  Monitoring:
-    - checkClusterHealth      : Overall cluster health and stability
-    - getPerformanceMetrics   : Node and pod performance metrics
-    - detectResourceIssues    : Resource allocation issues
-    - analyzePodDisruptions   : Pod restart and eviction analysis
-    - checkNodeConditions     : Node conditions and taints
-    - monitorDeployments      : Deployment rollout health
-    - checkKubeletStatus      : Kubelet service status
-    - checkCrioStatus         : CRI-O runtime status
-    - analyzeJournalctlPodErrors : Journal log analysis
+3. Add to OLSConfig:
 
-  Deployment:
-    - createDeployment        : Create deployments
-    - deployDatabase          : Deploy databases (PostgreSQL, MySQL, MongoDB, Redis)
-    - createHpa               : Configure horizontal pod autoscalers
-    - createService           : Create services
-    - createNetworkPolicy     : Create network policies
+   apiVersion: ols.openshift.io/v1alpha1
+   kind: OLSConfig
+   metadata:
+     name: cluster
+   spec:
+     featureGates:
+       - MCPServer
+     mcpServers:
+       - name: {{ .Values.olsConfig.mcpServerName }}
+         timeout: {{ .Values.olsConfig.mcpServerTimeout }}
+         url: 'http://{{ include "openshift-mcp-server.fullname" . }}.{{ .Values.namespace }}.svc.cluster.local:{{ .Values.service.port }}/mcp'
+       {{- if .Values.kubernetesMcp.enabled }}
+       - name: kubernetes-mcp-server
+         timeout: {{ .Values.olsConfig.mcpServerTimeout }}
+         url: 'http://{{ include "openshift-mcp-server.fullname" . }}-k8s-mcp.{{ .Values.namespace }}.svc.cluster.local:{{ .Values.kubernetesMcp.service.port }}/mcp'
+       {{- end }}
 
-  Performance Testing:
-    - runKubeBurner           : Cluster density testing
-    - runStorageBenchmark     : Storage I/O benchmarks
-    - runNetworkTest          : Network throughput tests
-    - runCpuStressTest        : CPU/memory stress tests
-    - runDatabaseBenchmark    : Database performance tests
+4. Available MCP Tools (19):
 
-To integrate with OpenShift Lightspeed, add to your OLSConfig:
-  spec:
-    featureGates:
-      - MCPServer
-    mcpServers:
-      - name: openshift-mcp-server
-        timeout: 30
-        url: 'http://{{ include "openshift-mcp-server.fullname" . }}.{{ .Values.namespace }}.svc.cluster.local:{{ .Values.service.port }}/mcp'
+   Monitoring:
+     checkClusterHealth, getPerformanceMetrics, detectResourceIssues,
+     analyzePodDisruptions, checkNodeConditions, monitorDeployments,
+     checkKubeletStatus, checkCrioStatus, analyzeJournalctlPodErrors
+
+   Deployment:
+     createDeployment, deployDatabase, createHpa, createService, createNetworkPolicy
+
+   Performance Testing:
+     runKubeBurner, runStorageBenchmark, runNetworkTest, runCpuStressTest, runDatabaseBenchmark
+
+{{- if .Values.kubernetesMcp.enabled }}
+
+5. Kubernetes MCP Server (Official openshift/openshift-mcp-server):
+
+   MCP endpoint (Streamable HTTP):
+   http://{{ include "openshift-mcp-server.fullname" . }}-k8s-mcp.{{ .Values.namespace }}.svc.cluster.local:{{ .Values.kubernetesMcp.service.port }}/mcp
+
+   Toolsets enabled: {{ .Values.kubernetesMcp.toolsets }}
+
+   Available tools:
+     Config:    configuration_contexts_list, targets_list, configuration_view
+     Core:      resources_list, resources_get, resources_create_or_update, resources_delete, resources_scale
+                pods_list, pods_get, pods_delete, pods_top, pods_exec, pods_log, pods_run
+                namespaces_list, projects_list, events_list, nodes_top, nodes_log
+     Helm:      helm_install, helm_list, helm_uninstall
+
+   Get the route URL:
+   oc get route {{ include "openshift-mcp-server.fullname" . }}-k8s-mcp -n {{ .Values.namespace }} -o jsonpath='{.spec.host}'
+
+{{- end }}
+
+{{- if .Values.inspector.enabled }}
+
+6. MCP Inspector (testing UI):
+
+   Get the Inspector URL:
+   oc get route {{ include "openshift-mcp-server.fullname" . }}-inspector -n {{ .Values.namespace }} -o jsonpath='{.spec.host}'
+
+   The Inspector auto-connects to the MCP server on startup.
+   If it disconnects, use the auto-connect URL:
+
+   https://<INSPECTOR_HOST>/?autoConnect=http://{{ include "openshift-mcp-server.fullname" . }}.{{ .Values.namespace }}.svc.cluster.local:{{ .Values.service.port }}/mcp&tab=tools
+
+{{- end }}
+
+{{- if .Values.litellm.enabled }}
+
+7. LiteLLM Proxy (OpenAI-compatible {{ .Values.litellm.model.name }} endpoint):
+
+   Get the LiteLLM URL:
+   oc get route {{ include "openshift-mcp-server.fullname" . }}-litellm -n {{ .Values.namespace }} -o jsonpath='{.spec.host}'
+
+   Test the proxy:
+   LITELLM_HOST=$(oc get route {{ include "openshift-mcp-server.fullname" . }}-litellm -n {{ .Values.namespace }} -o jsonpath='{.spec.host}')
+
+   curl -s https://${LITELLM_HOST}/v1/chat/completions \
+     -H "Authorization: Bearer {{ .Values.litellm.masterKey }}" \
+     -H "Content-Type: application/json" \
+     -d '{"model":"{{ .Values.litellm.model.name }}","messages":[{"role":"user","content":"Hello"}]}'
+
+   Note: The OAuth token expires after ~24h. Refresh with:
+   helm upgrade {{ .Release.Name }} ./helm/openshift-mcp-server \
+     --set litellm.model.apiKey=$(oc whoami -t)
+{{- end }}

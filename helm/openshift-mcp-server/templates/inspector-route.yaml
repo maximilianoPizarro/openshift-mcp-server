@@ -1,0 +1,22 @@
+{{- if and .Values.inspector.enabled .Values.inspector.route.enabled }}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ include "openshift-mcp-server.fullname" . }}-inspector
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "openshift-mcp-server.labels" . | nindent 4 }}
+    app.kubernetes.io/component: inspector
+  annotations:
+    haproxy.router.openshift.io/timeout: {{ .Values.inspector.route.timeout | default "300s" }}
+spec:
+  to:
+    kind: Service
+    name: {{ include "openshift-mcp-server.fullname" . }}-inspector
+    weight: 100
+  port:
+    targetPort: http
+  tls:
+    termination: {{ .Values.inspector.route.tls.termination }}
+  wildcardPolicy: None
+{{- end }}

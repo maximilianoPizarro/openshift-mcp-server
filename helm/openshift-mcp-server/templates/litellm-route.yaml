@@ -1,0 +1,23 @@
+{{- if and .Values.litellm.enabled .Values.litellm.route.enabled }}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ include "openshift-mcp-server.fullname" . }}-litellm
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "openshift-mcp-server.labels" . | nindent 4 }}
+    app.kubernetes.io/component: litellm
+  annotations:
+    haproxy.router.openshift.io/timeout: "300s"
+spec:
+  to:
+    kind: Service
+    name: {{ include "openshift-mcp-server.fullname" . }}-litellm
+    weight: 100
+  port:
+    targetPort: http
+  tls:
+    termination: {{ .Values.litellm.route.tls.termination }}
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None
+{{- end }}

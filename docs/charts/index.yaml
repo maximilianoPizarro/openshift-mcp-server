@@ -1,0 +1,30 @@
+apiVersion: v1
+entries:
+  openshift-mcp-server:
+  - annotations:
+      artifacthub.io/category: monitoring
+      artifacthub.io/license: Apache-2.0
+    apiVersion: v2
+    appVersion: 1.0.0
+    created: "2026-03-31T21:47:24.3016505-03:00"
+    description: Enterprise MCP Server for OpenShift Lightspeed - cluster monitoring,
+      deployment management, and performance testing
+    digest: dc92925e0ce67d7280d3164bba2cb07eb03c333eccc7237e9af04d8b4fc51fa6
+    icon: https://maximilianoPizarro.github.io/openshift-mcp-server/openshift-logo.png
+    keywords:
+    - openshift
+    - mcp
+    - lightspeed
+    - monitoring
+    - kubernetes
+    maintainers:
+    - name: maximilianoPizarro
+      url: https://github.com/maximilianoPizarro
+    name: openshift-mcp-server
+    sources:
+    - https://github.com/maximilianoPizarro/openshift-mcp-server
+    type: application
+    urls:
+    - https://maximilianoPizarro.github.io/openshift-mcp-server/charts/openshift-mcp-server-1.0.0.tgz
+    version: 1.0.0
+generated: "2026-03-31T21:47:24.299038-03:00"

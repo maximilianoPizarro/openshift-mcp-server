@@ -1,0 +1,45 @@
+{{- if .Values.inspector.enabled }}
+{{- $mcpUrl := printf "http://%s.%s.svc.cluster.local:%s/mcp" (include "openshift-mcp-server.fullname" .) .Values.namespace (toString (int .Values.service.port)) }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "openshift-mcp-server.fullname" . }}-inspector
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "openshift-mcp-server.labels" . | nindent 4 }}
+    app.kubernetes.io/component: inspector
+    app.openshift.io/runtime: nodejs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "openshift-mcp-server.fullname" . }}-inspector
+  template:
+    metadata:
+      labels:
+        app: {{ include "openshift-mcp-server.fullname" . }}-inspector
+        app.kubernetes.io/component: inspector
+        app.openshift.io/runtime: nodejs
+    spec:
+      containers:
+        - name: inspector
+          image: "{{ .Values.inspector.image.repository }}:{{ .Values.inspector.image.tag }}"
+          imagePullPolicy: {{ .Values.inspector.image.pullPolicy }}
+          command: ["npx", "@mcp-use/inspector"]
+          args:
+            - "--port"
+            - {{ .Values.inspector.service.port | quote }}
+            - "--url"
+            - {{ .Values.inspector.mcpServerUrl | default $mcpUrl | quote }}
+          ports:
+            - containerPort: {{ .Values.inspector.service.port }}
+              protocol: TCP
+              name: http
+          env:
+            - name: HOME
+              value: /tmp
+            - name: npm_config_cache
+              value: /tmp/.npm
+          resources:
+            {{- toYaml .Values.inspector.resources | nindent 12 }}
+{{- end }}

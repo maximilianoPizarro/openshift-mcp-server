@@ -1,0 +1,62 @@
+{{- if .Values.litellm.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "openshift-mcp-server.fullname" . }}-litellm
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "openshift-mcp-server.labels" . | nindent 4 }}
+    app.kubernetes.io/component: litellm
+    app.openshift.io/runtime: python
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "openshift-mcp-server.fullname" . }}-litellm
+  template:
+    metadata:
+      labels:
+        app: {{ include "openshift-mcp-server.fullname" . }}-litellm
+        app.kubernetes.io/component: litellm
+        app.openshift.io/runtime: python
+    spec:
+      containers:
+        - name: litellm
+          image: "{{ .Values.litellm.image.repository }}:{{ .Values.litellm.image.tag }}"
+          imagePullPolicy: {{ .Values.litellm.image.pullPolicy | default "IfNotPresent" }}
+          args:
+            - "--config"
+            - "/app/config.yaml"
+            - "--port"
+            - {{ .Values.litellm.service.port | quote }}
+          ports:
+            - containerPort: {{ .Values.litellm.service.port }}
+              protocol: TCP
+              name: http
+          env:
+            - name: LITELLM_MASTER_KEY
+              value: {{ .Values.litellm.masterKey | quote }}
+            - name: MODEL_API_KEY
+              value: {{ .Values.litellm.model.apiKey | quote }}
+            - name: SSL_VERIFY
+              value: "False"
+            - name: LITELLM_SSL_VERIFY
+              value: "False"
+            {{- if .Values.litellm.postgres.enabled }}
+            - name: DATABASE_URL
+              value: "postgresql://{{ .Values.litellm.postgres.user }}:{{ .Values.litellm.postgres.password }}@{{ include "openshift-mcp-server.fullname" . }}-litellm-db:5432/{{ .Values.litellm.postgres.database }}"
+            - name: STORE_MODEL_IN_DB
+              value: "True"
+            {{- end }}
+          volumeMounts:
+            - name: config
+              mountPath: /app/config.yaml
+              subPath: config.yaml
+              readOnly: true
+          resources:
+            {{- toYaml .Values.litellm.resources | nindent 12 }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "openshift-mcp-server.fullname" . }}-litellm
+{{- end }}

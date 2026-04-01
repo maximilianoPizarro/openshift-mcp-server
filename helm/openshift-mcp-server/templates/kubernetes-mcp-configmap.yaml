@@ -1,0 +1,26 @@
+{{- if .Values.kubernetesMcp.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "openshift-mcp-server.fullname" . }}-k8s-mcp
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "openshift-mcp-server.labels" . | nindent 4 }}
+    app.kubernetes.io/component: k8s-mcp
+data:
+  config.toml: |
+    log_level = 3
+    port = {{ .Values.kubernetesMcp.service.port | quote }}
+    {{- if .Values.kubernetesMcp.readOnly }}
+    read_only = true
+    {{- else }}
+    read_only = false
+    {{- end }}
+    disable_destructive = false
+    toolsets = [{{ range $i, $t := (splitList "," .Values.kubernetesMcp.toolsets) }}{{ if $i }}, {{ end }}{{ $t | quote }}{{ end }}]
+
+    denied_resources = [
+      {group = "", version = "v1", kind = "Secret"},
+      {group = "rbac.authorization.k8s.io", version = "v1"}
+    ]
+{{- end }}

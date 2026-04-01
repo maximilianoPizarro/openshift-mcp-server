@@ -1,0 +1,22 @@
+{{- if and .Values.kubernetesMcp.enabled .Values.kubernetesMcp.route.enabled }}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: {{ include "openshift-mcp-server.fullname" . }}-k8s-mcp
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "openshift-mcp-server.labels" . | nindent 4 }}
+    app.kubernetes.io/component: k8s-mcp
+  annotations:
+    haproxy.router.openshift.io/timeout: "300s"
+spec:
+  to:
+    kind: Service
+    name: {{ include "openshift-mcp-server.fullname" . }}-k8s-mcp
+    weight: 100
+  port:
+    targetPort: http
+  tls:
+    termination: edge
+  wildcardPolicy: None
+{{- end }}

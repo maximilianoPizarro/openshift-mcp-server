@@ -1,0 +1,16 @@
+title: OpenShift MCP Server
+description: Enterprise MCP Server for OpenShift Lightspeed
+baseurl: /openshift-mcp-server
+url: https://maximilianoPizarro.github.io
+logo: /openshift-mcp-server/openshift-logo.png
+
+markdown: kramdown
+highlighter: rouge
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+
+plugins:
+  - jekyll-seo-tag

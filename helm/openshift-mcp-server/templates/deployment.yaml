@@ -5,6 +5,7 @@ metadata:
   namespace: {{ .Values.namespace }}
   labels:
     {{- include "openshift-mcp-server.labels" . | nindent 4 }}
+    app.openshift.io/runtime: quarkus
 spec:
   replicas: {{ .Values.replicaCount }}
   selector:
@@ -14,6 +15,7 @@ spec:
     metadata:
       labels:
         {{- include "openshift-mcp-server.selectorLabels" . | nindent 8 }}
+        app.openshift.io/runtime: quarkus
     spec:
       {{- if .Values.serviceAccount.create }}
       serviceAccountName: {{ .Values.serviceAccount.name }}
@@ -25,24 +27,10 @@ spec:
           ports:
             - containerPort: {{ .Values.service.port }}
               protocol: TCP
+              name: http
           readinessProbe:
-            httpGet:
-              path: {{ .Values.health.readinessPath }}
-              port: {{ .Values.service.port }}
-            initialDelaySeconds: 10
-            periodSeconds: 10
+            {{- toYaml .Values.readinessProbe | nindent 12 }}
           livenessProbe:
-            httpGet:
-              path: {{ .Values.health.livenessPath }}
-              port: {{ .Values.service.port }}
-            initialDelaySeconds: 15
-            periodSeconds: 20
-          startupProbe:
-            httpGet:
-              path: {{ .Values.health.startupPath }}
-              port: {{ .Values.service.port }}
-            initialDelaySeconds: 5
-            periodSeconds: 5
-            failureThreshold: 12
+            {{- toYaml .Values.livenessProbe | nindent 12 }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}

@@ -1,0 +1,19 @@
+{{- if .Values.inspector.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "openshift-mcp-server.fullname" . }}-inspector
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "openshift-mcp-server.labels" . | nindent 4 }}
+    app.kubernetes.io/component: inspector
+spec:
+  type: {{ .Values.inspector.service.type }}
+  selector:
+    app: {{ include "openshift-mcp-server.fullname" . }}-inspector
+  ports:
+    - port: {{ .Values.inspector.service.port }}
+      targetPort: {{ .Values.inspector.service.port }}
+      protocol: TCP
+      name: http
+{{- end }}

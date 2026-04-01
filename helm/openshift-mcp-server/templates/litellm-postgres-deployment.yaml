@@ -1,0 +1,48 @@
+{{- if and .Values.litellm.enabled .Values.litellm.postgres.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "openshift-mcp-server.fullname" . }}-litellm-db
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "openshift-mcp-server.labels" . | nindent 4 }}
+    app.kubernetes.io/component: litellm-db
+    app.openshift.io/runtime: postgresql
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: {{ include "openshift-mcp-server.fullname" . }}-litellm-db
+  template:
+    metadata:
+      labels:
+        app: {{ include "openshift-mcp-server.fullname" . }}-litellm-db
+        app.kubernetes.io/component: litellm-db
+        app.openshift.io/runtime: postgresql
+    spec:
+      containers:
+        - name: postgresql
+          image: "{{ .Values.litellm.postgres.image.repository }}:{{ .Values.litellm.postgres.image.tag }}"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5432
+              protocol: TCP
+              name: postgresql
+          env:
+            - name: POSTGRESQL_USER
+              value: {{ .Values.litellm.postgres.user | quote }}
+            - name: POSTGRESQL_PASSWORD
+              value: {{ .Values.litellm.postgres.password | quote }}
+            - name: POSTGRESQL_DATABASE
+              value: {{ .Values.litellm.postgres.database | quote }}
+          volumeMounts:
+            - name: data
+              mountPath: /var/lib/pgsql/data
+          resources:
+            {{- toYaml .Values.litellm.postgres.resources | nindent 12 }}
+      volumes:
+        - name: data
+          emptyDir: {}
+{{- end }}

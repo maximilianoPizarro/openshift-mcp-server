@@ -1,0 +1,64 @@
+{{- if .Values.kubernetesMcp.enabled }}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "openshift-mcp-server.fullname" . }}-k8s-mcp
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "openshift-mcp-server.labels" . | nindent 4 }}
+    app.kubernetes.io/component: k8s-mcp
+    app.openshift.io/runtime: golang
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{ include "openshift-mcp-server.fullname" . }}-k8s-mcp
+  template:
+    metadata:
+      labels:
+        app: {{ include "openshift-mcp-server.fullname" . }}-k8s-mcp
+        app.kubernetes.io/component: k8s-mcp
+        app.openshift.io/runtime: golang
+    spec:
+      serviceAccountName: {{ .Values.kubernetesMcp.serviceAccount.name | default "default" }}
+      volumes:
+        - name: config
+          configMap:
+            name: {{ include "openshift-mcp-server.fullname" . }}-k8s-mcp
+      containers:
+        - name: kubernetes-mcp-server
+          image: "{{ .Values.kubernetesMcp.image.repository }}:{{ .Values.kubernetesMcp.image.tag }}"
+          imagePullPolicy: {{ .Values.kubernetesMcp.image.pullPolicy }}
+          command: ["/openshift-mcp-server"]
+          args:
+            - "--config"
+            - "/etc/k8s-mcp/config.toml"
+          volumeMounts:
+            - name: config
+              mountPath: /etc/k8s-mcp
+              readOnly: true
+          ports:
+            - containerPort: {{ .Values.kubernetesMcp.service.port }}
+              protocol: TCP
+              name: http
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 3
+            periodSeconds: 5
+          resources:
+            {{- toYaml .Values.kubernetesMcp.resources | nindent 12 }}
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            runAsNonRoot: true
+{{- end }}

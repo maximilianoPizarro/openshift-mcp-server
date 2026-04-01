@@ -1,0 +1,41 @@
+{{- if .Values.litellm.enabled }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "openshift-mcp-server.fullname" . }}-litellm
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "openshift-mcp-server.labels" . | nindent 4 }}
+    app.kubernetes.io/component: litellm
+data:
+  config.yaml: |
+    model_list:
+      - model_name: {{ .Values.litellm.model.name }}
+        litellm_params:
+          model: openai/{{ .Values.litellm.model.modelId }}
+          api_base: {{ .Values.litellm.model.apiBase }}
+          api_key: os.environ/MODEL_API_KEY
+          ssl_verify: false
+          drop_params: true
+          additional_drop_params:
+            - tool_choice
+            - tools
+        model_info:
+          supports_function_calling: false
+
+    mcp_servers:
+      openshift_mcp_server:
+        url: http://{{ include "openshift-mcp-server.fullname" . }}.{{ .Values.namespace }}.svc.cluster.local:{{ .Values.service.port }}/mcp
+        transport: http
+      {{- if .Values.kubernetesMcp.enabled }}
+      kubernetes_mcp_server:
+        url: http://{{ include "openshift-mcp-server.fullname" . }}-k8s-mcp.{{ .Values.namespace }}.svc.cluster.local:{{ .Values.kubernetesMcp.service.port }}/mcp
+        transport: http
+      {{- end }}
+
+    litellm_settings:
+      drop_params: true
+
+    general_settings:
+      master_key: os.environ/LITELLM_MASTER_KEY
+{{- end }}

@@ -1,8 +1,12 @@
-# OpenShift MCP Server
+<p align="center">
+  <img src="docs/openshift-logo.png" alt="OpenShift" width="120">
+</p>
 
-**Enterprise MCP Server for OpenShift Lightspeed**
+<h1 align="center">OpenShift MCP Server</h1>
 
-MCP (Model Context Protocol) server built with **Quarkus** that provides 19 operational tools for OpenShift cluster monitoring, deployment management, and performance testing. Designed to integrate with **OpenShift Lightspeed** as an enterprise-grade AI assistant backend.
+<p align="center"><strong>Enterprise MCP Server for OpenShift Lightspeed</strong></p>
+
+Dual MCP server deployment combining a custom **Quarkus** server (19 operational tools for monitoring, deployment, and performance testing) with the official **[openshift/openshift-mcp-server](https://github.com/openshift/openshift-mcp-server)** (generic Kubernetes CRUD, pod exec/logs, Helm management). Designed to integrate with **OpenShift Lightspeed** as an enterprise-grade AI assistant backend.
 
 ## Architecture
 
@@ -12,27 +16,38 @@ MCP (Model Context Protocol) server built with **Quarkus** that provides 19 oper
 │  (User Interface)   │     │  + MCP Client                │     │  (Granite/etc)  │
 └─────────────────────┘     └──────────┬───────────────────┘     └─────────────────┘
                                        │ MCP Protocol (HTTP)
-                                       ▼
-                            ┌──────────────────────────────┐
-                            │   OpenShift MCP Server       │
-                            │   (Quarkus + Fabric8)        │
-                            │                              │
-                            │   19 Tools:                  │
-                            │   • 9 Monitoring             │
-                            │   • 5 Deployment             │
-                            │   • 5 Performance Testing    │
-                            └──────────┬───────────────────┘
-                                       │ Kubernetes API
-                                       ▼
-                            ┌──────────────────────────────┐
-                            │   OpenShift Cluster          │
-                            │   (Nodes, Pods, Services)    │
-                            └──────────────────────────────┘
+                              ┌────────┴────────┐
+                              ▼                 ▼
+               ┌──────────────────────┐  ┌──────────────────────┐
+               │  OpenShift MCP       │  │  Kubernetes MCP      │
+               │  (Quarkus + Fabric8) │  │  (Official Go)       │
+               │                      │  │                      │
+               │  19 Custom Tools:    │  │  20+ Generic Tools:  │
+               │  • 9 Monitoring      │  │  • Generic CRUD      │
+               │  • 5 Deployment      │  │  • Pod exec/logs     │
+               │  • 5 Perf Testing    │  │  • Helm management   │
+               │  :8080/mcp           │  │  • Events/Namespaces │
+               └──────────┬───────────┘  │  :8085/mcp           │
+                          │              └──────────┬───────────┘
+                          └────────┬───────────────┘
+                                   ▼
+                        ┌──────────────────────────────┐
+                        │   OpenShift Cluster           │
+                        │   (Nodes, Pods, Services)     │
+                        └──────────────────────────────┘
+
+  Supporting Services:
+  ┌──────────────┐  ┌──────────────────┐  ┌──────────────┐
+  │ MCP Inspector│  │ LiteLLM Proxy    │  │ PostgreSQL   │
+  │ (Testing UI) │  │ (OpenAI compat)  │  │ (LiteLLM DB) │
+  └──────────────┘  └──────────────────┘  └──────────────┘
 ```
 
 ## MCP Tools
 
-### Monitoring (9 tools)
+### Custom Quarkus Server (19 tools) - Port 8080
+
+#### Monitoring (9 tools)
 
 | Tool | Description |
 |------|-------------|
@@ -46,7 +61,7 @@ MCP (Model Context Protocol) server built with **Quarkus** that provides 19 oper
 | `checkCrioStatus` | CRI-O container runtime status and logs |
 | `analyzeJournalctlPodErrors` | Journal log analysis with pod/service filters |
 
-### Deployment (5 tools)
+#### Deployment (5 tools)
 
 | Tool | Description |
 |------|-------------|
@@ -56,7 +71,7 @@ MCP (Model Context Protocol) server built with **Quarkus** that provides 19 oper
 | `createService` | Create ClusterIP/NodePort/LoadBalancer services |
 | `createNetworkPolicy` | Create network policies (deny-all, allow-same-namespace) |
 
-### Performance Testing (5 tools)
+#### Performance Testing (5 tools)
 
 | Tool | Description |
 |------|-------------|
@@ -65,6 +80,18 @@ MCP (Model Context Protocol) server built with **Quarkus** that provides 19 oper
 | `runNetworkTest` | Network throughput tests with iperf3 |
 | `runCpuStressTest` | CPU/memory stress testing with stress-ng |
 | `runDatabaseBenchmark` | Database benchmarks with pgbench/sysbench |
+
+### Official Kubernetes MCP Server (20+ tools) - Port 8085
+
+From [openshift/openshift-mcp-server](https://github.com/openshift/openshift-mcp-server), a Go-based native implementation that interacts directly with the Kubernetes API.
+
+| Toolset | Tools |
+|---------|-------|
+| **Config** | `configuration_contexts_list`, `targets_list`, `configuration_view` |
+| **Core** | `resources_list`, `resources_get`, `resources_create_or_update`, `resources_delete`, `resources_scale`, `pods_list`, `pods_get`, `pods_delete`, `pods_top`, `pods_exec`, `pods_log`, `pods_run`, `namespaces_list`, `projects_list`, `events_list`, `nodes_top`, `nodes_log` |
+| **Helm** | `helm_install`, `helm_list`, `helm_uninstall` |
+
+Additional toolsets available via `values.yaml`: `kubevirt`, `observability`, `ossm`, `kcp`.
 
 ## Quick Start
 
@@ -79,15 +106,6 @@ helm install openshift-mcp-server ./helm/openshift-mcp-server \
 
 ### 2. Configure OLSConfig
 
-Apply the provided `cluster-ols.yml` or add the MCP server to your existing OLSConfig:
-
-```bash
-# Option A: Use the provided sample (edit LLM provider as needed)
-oc apply -f k8s/cluster-ols.yml
-
-# Option B: Add to your existing OLSConfig
-```
-
 ```yaml
 apiVersion: ols.openshift.io/v1alpha1
 kind: OLSConfig
@@ -99,8 +117,10 @@ spec:
   mcpServers:
     - name: openshift-mcp-server
       timeout: 30
-      url: 'http://openshift-mcp-server.openshift-lightspeed.svc.cluster.local:8080/mcp'
-  # ... rest of your OLS configuration
+      url: 'http://openshift-mcp-server.<namespace>.svc.cluster.local:8080/mcp'
+    - name: kubernetes-mcp-server
+      timeout: 30
+      url: 'http://openshift-mcp-server-k8s-mcp.<namespace>.svc.cluster.local:8085/mcp'
 ```
 
 > **Important**: Use `/mcp` (Streamable HTTP), not `/mcp/sse`. OLS uses POST requests which require the Streamable HTTP endpoint.
@@ -115,13 +135,14 @@ oc apply -f k8s/cluster-ols.yml
 ### 4. Verify
 
 ```bash
-# Check MCP pod is running
-oc get pods -n openshift-lightspeed -l app=openshift-mcp-server
+# Check all MCP pods are running
+oc get pods -n <namespace> | grep openshift-mcp-server
+
+# Expected: 5 pods (mcp-server, k8s-mcp, inspector, litellm, litellm-db)
 
 # Check OLS loaded the tools
 oc logs -n openshift-lightspeed deploy/lightspeed-app-server \
   -c lightspeed-service-api | grep "tools from MCP"
-# Expected: Loaded 19 tools from MCP server 'openshift-mcp-server'
 ```
 
 ### 5. Test in Lightspeed
@@ -172,6 +193,16 @@ The `deployDatabase` tool uses official Red Hat catalog images:
 | MongoDB    | `registry.redhat.io/rhel9/mongodb-70:latest` |
 | Redis      | `registry.redhat.io/rhel9/redis-7:latest` |
 
+## Helm Chart Components
+
+| Component | Image | Port | Description |
+|-----------|-------|------|-------------|
+| **openshift-mcp-server** | `quay.io/maximilianopizarro/openshift-mcp-server` | 8080 | Custom Quarkus MCP (monitoring, deployment, perf) |
+| **kubernetes-mcp-server** | `quay.io/redhat-user-workloads/.../openshift-mcp-server` | 8085 | Official K8s MCP (CRUD, pods, helm, events) |
+| **mcp-inspector** | `mcpuse/inspector` | 8080 | MCP testing UI |
+| **litellm** | `litellm/litellm-non_root` | 4000 | OpenAI-compatible LLM proxy |
+| **litellm-db** | `registry.redhat.io/rhel9/postgresql-15` | 5432 | LiteLLM PostgreSQL backend |
+
 ## Cursor MCP Configuration
 
 To use this server with Cursor IDE locally:
@@ -181,6 +212,9 @@ To use this server with Cursor IDE locally:
   "mcpServers": {
     "openshift-mcp-server": {
       "url": "http://localhost:8080/mcp"
+    },
+    "kubernetes-mcp-server": {
+      "url": "http://localhost:8085/mcp"
     }
   }
 }

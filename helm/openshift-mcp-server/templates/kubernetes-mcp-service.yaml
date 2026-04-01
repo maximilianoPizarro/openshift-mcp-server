@@ -1,0 +1,19 @@
+{{- if .Values.kubernetesMcp.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "openshift-mcp-server.fullname" . }}-k8s-mcp
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "openshift-mcp-server.labels" . | nindent 4 }}
+    app.kubernetes.io/component: k8s-mcp
+spec:
+  type: ClusterIP
+  selector:
+    app: {{ include "openshift-mcp-server.fullname" . }}-k8s-mcp
+  ports:
+    - port: {{ .Values.kubernetesMcp.service.port }}
+      targetPort: {{ .Values.kubernetesMcp.service.port }}
+      protocol: TCP
+      name: http
+{{- end }}
