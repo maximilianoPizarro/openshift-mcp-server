@@ -69,6 +69,21 @@ Dual MCP server deployment combining a custom **Quarkus** server (19 operational
   <img src="docs/helm-catalog.png" alt="Helm Catalog" width="800">
 </p>
 
+### MCP Inspector - 19 Tools Connected
+<p align="center">
+  <img src="docs/mcp-inspector.png" alt="MCP Inspector" width="800">
+</p>
+
+### LiteLLM - Model Management (Qwen3 8B)
+<p align="center">
+  <img src="docs/litellm-models.png" alt="LiteLLM Models" width="800">
+</p>
+
+### LiteLLM - MCP Servers Configuration
+<p align="center">
+  <img src="docs/litellm-mcp-servers.png" alt="LiteLLM MCP Servers" width="800">
+</p>
+
 ## Architecture
 
 ```
