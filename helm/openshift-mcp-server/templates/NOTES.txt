@@ -112,8 +112,11 @@ OpenShift MCP Server deployed successfully!
      "Show logs for pod openshift-mcp-server in namespace openshift-lightspeed"
      "Get events in namespace default"
      "List all namespaces in the cluster"
-     "Scale deployment nginx to 3 replicas in namespace dev"
+
+   Helm Operations:
      "List all helm releases"
+     "Install showroom-docs-mcp chart from https://maximilianoPizarro.github.io/showroom-docs-mcp in namespace test-dev"
+     "Uninstall helm release showroom-docs-mcp"
 
    Performance Testing:
      "Run a storage benchmark in namespace perf-test"
