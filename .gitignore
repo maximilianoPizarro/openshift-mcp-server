@@ -40,5 +40,6 @@ node_modules/
 *.pem
 *.key
 
-# Helm packages
+# Helm packages (except docs/charts for GitHub Pages Helm repo)
 *.tgz
+!docs/charts/*.tgz
