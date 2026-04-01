@@ -5,69 +5,425 @@ title: OpenShift MCP Server
 
 <section class="hero">
   <div class="hero-content">
-    <img src="{{ site.baseurl }}/openshift-logo.png" alt="OpenShift">
-    <h2>OpenShift MCP Server</h2>
-    <p>Enterprise MCP Server for OpenShift Lightspeed. Dual server deployment combining custom operational tools with the official Kubernetes MCP server.</p>
+    <img src="{{ site.baseurl }}/openshift-logo.png" alt="OpenShift" class="hero-logo">
+    <h2>Enterprise <span class="accent">MCP Server</span> for OpenShift Lightspeed</h2>
+    <p class="hero-subtitle">
+      Dual-server deployment combining 19 custom operational tools with the official Kubernetes MCP Server.
+      AI-powered cluster monitoring, deployment management, and performance testing &mdash; all through natural language.
+    </p>
     <div class="badge-row">
-      <span class="badge" style="background:#7A4900;color:#DDD">Experimental</span>
-      <span class="badge badge-red">Quarkus</span>
+      <span class="badge badge-gold">Experimental</span>
+      <span class="badge badge-red">Quarkus 3.27</span>
       <span class="badge badge-blue">MCP Protocol</span>
       <span class="badge badge-dark">40+ Tools</span>
       <span class="badge badge-green">Helm Chart</span>
-      <span class="badge" style="background:#7A4900;color:#DDD">v0.1.0-alpha</span>
+      <span class="badge badge-dark">OpenShift AI</span>
+      <span class="badge badge-gold">v0.1.0-alpha</span>
     </div>
-    <p style="background:#2A2014;border:1px solid #4A3520;padding:10px 14px;margin:12px auto 0;border-radius:4px;font-size:0.85em;color:#C0A878;max-width:580px;text-align:left;">
-      <strong>Experimental</strong> — Under active development. APIs and Helm chart values may change without notice.
-    </p>
+    <div class="experimental-banner">
+      <strong>Experimental</strong> &mdash; Under active development. APIs, tool signatures, and Helm chart values may change without notice. Not recommended for production workloads.
+    </div>
     <div class="install-box">
-      <div class="label">Install via Helm</div>
+      <div class="label">Quick Install via Helm</div>
       <code>helm repo add openshift-mcp https://maximilianoPizarro.github.io/openshift-mcp-server</code><br>
       <code>helm install openshift-mcp-server openshift-mcp/openshift-mcp-server -n openshift-lightspeed</code>
     </div>
   </div>
 </section>
 
+<div class="stats-bar">
+  <div class="stats-bar-inner">
+    <div class="stat-item">
+      <div class="stat-number">19<span class="stat-accent">+</span></div>
+      <div class="stat-label">Custom MCP Tools</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">21</div>
+      <div class="stat-label">K8s MCP Tools</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">5</div>
+      <div class="stat-label">Helm Components</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">2</div>
+      <div class="stat-label">MCP Servers</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-number">3</div>
+      <div class="stat-label">Tool Categories</div>
+    </div>
+  </div>
+</div>
+
 <div class="main">
 
-  <section>
+  <!-- ═══ DEPLOYMENT TIERS ═══ -->
+  <section id="deploy">
+    <h2>Deployment Options</h2>
+    <p class="section-subtitle">Choose the deployment mode that matches your environment and permissions. The Developer Sandbox edition provides a safe way to explore MCP capabilities with limited cluster access.</p>
+
+    <div class="tier-grid">
+      <div class="tier-card tier-sandbox">
+        <span class="tier-badge">Developer Sandbox</span>
+        <h3>Sandbox Edition &mdash; Qwen3 8B</h3>
+        <p class="tier-desc">Perfect for evaluating MCP Server capabilities in the Red Hat Developer Sandbox. Uses namespace-scoped permissions and the Qwen3 8B model via RHOAI vLLM. Only tools compatible with ServiceAccount namespace-level permissions are available.</p>
+        <ul class="tier-features">
+          <li>Namespace-scoped ServiceAccount (no cluster-admin)</li>
+          <li>Qwen3 8B model via OpenShift AI / vLLM</li>
+          <li>Deployment tools (createDeployment, deployDatabase)</li>
+          <li>Namespace monitoring (monitorDeployments, detectResourceIssues)</li>
+          <li>Performance testing (runStorageBenchmark, runCpuStressTest)</li>
+          <li>HPA, Services, NetworkPolicies</li>
+          <li>Kubernetes MCP (pods, resources, helm &mdash; namespace only)</li>
+          <li class="disabled">Cluster-wide monitoring (checkClusterHealth, checkNodeConditions)</li>
+          <li class="disabled">Node-level tools (checkKubeletStatus, checkCrioStatus)</li>
+          <li class="disabled">Cluster density testing (runKubeBurner)</li>
+        </ul>
+        <div class="tier-install">
+          <code>helm install openshift-mcp-server openshift-mcp/openshift-mcp-server \<br>
+          &nbsp;&nbsp;-n $NAMESPACE \<br>
+          &nbsp;&nbsp;-f values-developer-sandbox.yaml</code>
+        </div>
+        <div class="permission-callout info">
+          <span class="permission-icon">&#9432;</span>
+          <span>Tools are limited by the ServiceAccount Role permissions. Cluster-wide monitoring and node-level operations require cluster-admin and are not available in this mode.</span>
+        </div>
+      </div>
+
+      <div class="tier-card tier-full">
+        <span class="tier-badge">Full Version</span>
+        <h3>Full Cluster &mdash; cluster-admin</h3>
+        <p class="tier-desc">Complete deployment with all 40+ tools enabled. Requires cluster-admin ClusterRoleBinding for full access to nodes, metrics API, cross-namespace monitoring, and cluster density testing.</p>
+        <ul class="tier-features">
+          <li>ClusterRoleBinding with cluster-admin</li>
+          <li>All 19 custom Quarkus MCP tools</li>
+          <li>All 21 Kubernetes MCP tools</li>
+          <li>Full cluster health monitoring across all namespaces</li>
+          <li>Node conditions, kubelet &amp; CRI-O status</li>
+          <li>Performance metrics API access</li>
+          <li>KubeBurner cluster density testing</li>
+          <li>OLSConfig integration for OpenShift Lightspeed</li>
+          <li>LiteLLM proxy with configurable model backend</li>
+          <li>MCP Inspector testing UI</li>
+        </ul>
+        <div class="tier-install">
+          <code>helm install openshift-mcp-server openshift-mcp/openshift-mcp-server \<br>
+          &nbsp;&nbsp;-n openshift-lightspeed \<br>
+          &nbsp;&nbsp;--set namespace=openshift-lightspeed \<br>
+          &nbsp;&nbsp;--set serviceAccount.create=true</code>
+        </div>
+        <div class="permission-callout danger">
+          <span class="permission-icon">&#9888;</span>
+          <span><strong>Requires cluster-admin.</strong> This deployment creates a ClusterRoleBinding granting full cluster access to the MCP Server ServiceAccount. Only deploy in environments where this level of access is authorized.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ ARCHITECTURE DIAGRAM ═══ -->
+  <section id="architecture">
     <h2>Architecture</h2>
+    <p class="section-subtitle">High-level topology showing how OpenShift Lightspeed connects to the dual MCP servers through LiteLLM, backed by RHOAI vLLM model serving.</p>
+
+    <div class="architecture-diagram">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 560" style="width:100%;max-width:920px">
+        <defs>
+          <marker id="arrow-red" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#EE0000"/>
+          </marker>
+          <marker id="arrow-blue" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#0066CC"/>
+          </marker>
+          <marker id="arrow-gray" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="#666"/>
+          </marker>
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="2" result="blur"/>
+            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+          </filter>
+        </defs>
+
+        <!-- Cluster background -->
+        <rect width="920" height="560" rx="12" fill="#111"/>
+        <rect x="12" y="12" width="896" height="536" rx="8" fill="none" stroke="#2A2A2A" stroke-width="1"/>
+        <text x="460" y="34" text-anchor="middle" fill="#444" font-size="11" font-family="Red Hat Display, sans-serif" font-weight="500">openshift-lightspeed namespace</text>
+
+        <!-- ── Row 1: OpenShift Lightspeed ── -->
+        <g transform="translate(360, 50)">
+          <rect width="200" height="58" rx="10" fill="#1A1A1A" stroke="#EE0000" stroke-width="2"/>
+          <image href="{{ site.baseurl }}/openshift-logo.png" x="12" y="9" width="40" height="40"/>
+          <text x="62" y="28" fill="#F0F0F0" font-size="13" font-weight="700" font-family="Red Hat Display, sans-serif">OpenShift</text>
+          <text x="62" y="44" fill="#999" font-size="11" font-family="Red Hat Display, sans-serif">Lightspeed (MCP Client)</text>
+        </g>
+
+        <!-- Connector: Lightspeed → LiteLLM -->
+        <line x1="460" y1="108" x2="380" y2="170" stroke="#EE0000" stroke-width="2" marker-end="url(#arrow-red)"/>
+        <!-- Connector: Lightspeed → MCP Servers -->
+        <line x1="460" y1="108" x2="460" y2="170" stroke="#666" stroke-width="1.5" stroke-dasharray="6,3" marker-end="url(#arrow-gray)"/>
+        <text x="490" y="145" fill="#555" font-size="9" font-family="Red Hat Display, sans-serif">tool definitions</text>
+
+        <!-- ── Row 2: LiteLLM + RHOAI ── -->
+        <g transform="translate(250, 175)">
+          <rect width="180" height="58" rx="10" fill="#1A1A1A" stroke="#0066CC" stroke-width="2"/>
+          <image href="{{ site.baseurl }}/openshift-logo.png" x="12" y="9" width="40" height="40"/>
+          <text x="62" y="28" fill="#F0F0F0" font-size="13" font-weight="700" font-family="Red Hat Display, sans-serif">LiteLLM Proxy</text>
+          <text x="62" y="44" fill="#999" font-size="11" font-family="Red Hat Display, sans-serif">OpenAI-compatible API</text>
+        </g>
+
+        <!-- RHOAI vLLM -->
+        <g transform="translate(50, 175)">
+          <rect width="170" height="58" rx="10" fill="#1A1A1A" stroke="#3E8635" stroke-width="2"/>
+          <image href="{{ site.baseurl }}/openshift-logo.png" x="12" y="9" width="40" height="40"/>
+          <text x="62" y="28" fill="#F0F0F0" font-size="12" font-weight="700" font-family="Red Hat Display, sans-serif">RHOAI vLLM</text>
+          <text x="62" y="44" fill="#999" font-size="10" font-family="Red Hat Display, sans-serif">Qwen3 8B / Granite</text>
+        </g>
+
+        <!-- Connector: LiteLLM ← RHOAI -->
+        <line x1="220" y1="204" x2="250" y2="204" stroke="#3E8635" stroke-width="2" marker-end="url(#arrow-blue)"/>
+
+        <!-- PostgreSQL -->
+        <g transform="translate(250, 260)">
+          <rect width="140" height="46" rx="8" fill="#1A1A1A" stroke="#444" stroke-width="1.5"/>
+          <image href="{{ site.baseurl }}/openshift-logo.png" x="10" y="6" width="34" height="34"/>
+          <text x="52" y="22" fill="#CCC" font-size="11" font-weight="600" font-family="Red Hat Display, sans-serif">PostgreSQL</text>
+          <text x="52" y="36" fill="#777" font-size="9" font-family="Red Hat Display, sans-serif">LiteLLM backend DB</text>
+        </g>
+
+        <!-- Connector: LiteLLM → PostgreSQL -->
+        <line x1="340" y1="233" x2="340" y2="260" stroke="#444" stroke-width="1.5" marker-end="url(#arrow-gray)"/>
+
+        <!-- ── Row 3: MCP Servers ── -->
+        <!-- Quarkus MCP Server -->
+        <g transform="translate(470, 175)">
+          <rect width="190" height="58" rx="10" fill="#1A1A1A" stroke="#EE0000" stroke-width="2"/>
+          <image href="{{ site.baseurl }}/openshift-logo.png" x="12" y="9" width="40" height="40"/>
+          <text x="62" y="25" fill="#F0F0F0" font-size="12" font-weight="700" font-family="Red Hat Display, sans-serif">Quarkus MCP</text>
+          <text x="62" y="40" fill="#999" font-size="10" font-family="Red Hat Display, sans-serif">19 custom tools</text>
+          <text x="62" y="52" fill="#666" font-size="9" font-family="Red Hat Mono, monospace">POST /mcp :8080</text>
+        </g>
+
+        <!-- Kubernetes MCP Server -->
+        <g transform="translate(470, 260)">
+          <rect width="190" height="58" rx="10" fill="#1A1A1A" stroke="#0066CC" stroke-width="2"/>
+          <image href="{{ site.baseurl }}/openshift-logo.png" x="12" y="9" width="40" height="40"/>
+          <text x="62" y="25" fill="#F0F0F0" font-size="12" font-weight="700" font-family="Red Hat Display, sans-serif">Kubernetes MCP</text>
+          <text x="62" y="40" fill="#999" font-size="10" font-family="Red Hat Display, sans-serif">21 official tools</text>
+          <text x="62" y="52" fill="#666" font-size="9" font-family="Red Hat Mono, monospace">POST /mcp :8085</text>
+        </g>
+
+        <!-- MCP Inspector -->
+        <g transform="translate(700, 215)">
+          <rect width="170" height="58" rx="10" fill="#1A1A1A" stroke="#6753AC" stroke-width="2"/>
+          <image href="{{ site.baseurl }}/openshift-logo.png" x="12" y="9" width="40" height="40"/>
+          <text x="62" y="28" fill="#F0F0F0" font-size="12" font-weight="700" font-family="Red Hat Display, sans-serif">MCP Inspector</text>
+          <text x="62" y="44" fill="#999" font-size="10" font-family="Red Hat Display, sans-serif">Testing &amp; Debug UI</text>
+        </g>
+
+        <!-- Connector: Inspector → Quarkus MCP -->
+        <line x1="700" y1="240" x2="660" y2="210" stroke="#6753AC" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrow-gray)"/>
+        <!-- Connector: Inspector → K8s MCP -->
+        <line x1="700" y1="250" x2="660" y2="286" stroke="#6753AC" stroke-width="1.5" stroke-dasharray="4,3" marker-end="url(#arrow-gray)"/>
+
+        <!-- Connector: Lightspeed → Quarkus MCP (tool calls) -->
+        <text x="345" y="145" fill="#EE0000" font-size="9" font-family="Red Hat Display, sans-serif">LLM inference</text>
+
+        <!-- ── Row 4: OpenShift API ── -->
+        <g transform="translate(420, 360)">
+          <rect width="200" height="58" rx="10" fill="#1A1A1A" stroke="#EE0000" stroke-width="2.5" filter="url(#glow)"/>
+          <image href="{{ site.baseurl }}/openshift-logo.png" x="12" y="9" width="40" height="40"/>
+          <text x="62" y="28" fill="#F0F0F0" font-size="14" font-weight="700" font-family="Red Hat Display, sans-serif">OpenShift API</text>
+          <text x="62" y="44" fill="#999" font-size="10" font-family="Red Hat Display, sans-serif">Cluster Resources</text>
+        </g>
+
+        <!-- Connectors: MCP Servers → OpenShift API -->
+        <line x1="540" y1="233" x2="520" y2="360" stroke="#EE0000" stroke-width="2" marker-end="url(#arrow-red)"/>
+        <line x1="560" y1="318" x2="530" y2="360" stroke="#0066CC" stroke-width="2" marker-end="url(#arrow-blue)"/>
+
+        <!-- ── Row 5: Resources ── -->
+        <g transform="translate(130, 440)">
+          <rect width="120" height="42" rx="6" fill="#1A1A1A" stroke="#333" stroke-width="1"/>
+          <image href="{{ site.baseurl }}/openshift-logo.png" x="8" y="5" width="32" height="32"/>
+          <text x="46" y="20" fill="#AAA" font-size="10" font-weight="600" font-family="Red Hat Display, sans-serif">Deployments</text>
+          <text x="46" y="33" fill="#666" font-size="9" font-family="Red Hat Display, sans-serif">apps/v1</text>
+        </g>
+        <g transform="translate(280, 440)">
+          <rect width="100" height="42" rx="6" fill="#1A1A1A" stroke="#333" stroke-width="1"/>
+          <image href="{{ site.baseurl }}/openshift-logo.png" x="8" y="5" width="32" height="32"/>
+          <text x="46" y="20" fill="#AAA" font-size="10" font-weight="600" font-family="Red Hat Display, sans-serif">Pods</text>
+          <text x="46" y="33" fill="#666" font-size="9" font-family="Red Hat Display, sans-serif">v1</text>
+        </g>
+        <g transform="translate(410, 440)">
+          <rect width="100" height="42" rx="6" fill="#1A1A1A" stroke="#333" stroke-width="1"/>
+          <image href="{{ site.baseurl }}/openshift-logo.png" x="8" y="5" width="32" height="32"/>
+          <text x="46" y="20" fill="#AAA" font-size="10" font-weight="600" font-family="Red Hat Display, sans-serif">Nodes</text>
+          <text x="46" y="33" fill="#666" font-size="9" font-family="Red Hat Display, sans-serif">v1</text>
+        </g>
+        <g transform="translate(540, 440)">
+          <rect width="110" height="42" rx="6" fill="#1A1A1A" stroke="#333" stroke-width="1"/>
+          <image href="{{ site.baseurl }}/openshift-logo.png" x="8" y="5" width="32" height="32"/>
+          <text x="46" y="20" fill="#AAA" font-size="10" font-weight="600" font-family="Red Hat Display, sans-serif">Services</text>
+          <text x="46" y="33" fill="#666" font-size="9" font-family="Red Hat Display, sans-serif">v1</text>
+        </g>
+        <g transform="translate(680, 440)">
+          <rect width="100" height="42" rx="6" fill="#1A1A1A" stroke="#333" stroke-width="1"/>
+          <image href="{{ site.baseurl }}/openshift-logo.png" x="8" y="5" width="32" height="32"/>
+          <text x="46" y="20" fill="#AAA" font-size="10" font-weight="600" font-family="Red Hat Display, sans-serif">Routes</text>
+          <text x="46" y="33" fill="#666" font-size="9" font-family="Red Hat Display, sans-serif">route.openshift.io</text>
+        </g>
+
+        <!-- Connectors: API → Resources -->
+        <line x1="460" y1="418" x2="200" y2="440" stroke="#333" stroke-width="1"/>
+        <line x1="480" y1="418" x2="340" y2="440" stroke="#333" stroke-width="1"/>
+        <line x1="510" y1="418" x2="460" y2="440" stroke="#333" stroke-width="1"/>
+        <line x1="540" y1="418" x2="590" y2="440" stroke="#333" stroke-width="1"/>
+        <line x1="570" y1="418" x2="720" y2="440" stroke="#333" stroke-width="1"/>
+
+        <!-- Legend -->
+        <g transform="translate(30, 500)">
+          <text x="0" y="12" fill="#555" font-size="9" font-weight="600" font-family="Red Hat Display, sans-serif">LEGEND:</text>
+          <line x1="60" y1="9" x2="85" y2="9" stroke="#EE0000" stroke-width="2"/>
+          <text x="90" y="12" fill="#777" font-size="9" font-family="Red Hat Display, sans-serif">Data flow</text>
+          <line x1="145" y1="9" x2="170" y2="9" stroke="#666" stroke-width="1.5" stroke-dasharray="4,3"/>
+          <text x="175" y="12" fill="#777" font-size="9" font-family="Red Hat Display, sans-serif">Tool registration</text>
+          <rect x="260" y="2" width="14" height="14" rx="3" fill="none" stroke="#EE0000" stroke-width="1.5"/>
+          <text x="280" y="12" fill="#777" font-size="9" font-family="Red Hat Display, sans-serif">Custom</text>
+          <rect x="320" y="2" width="14" height="14" rx="3" fill="none" stroke="#0066CC" stroke-width="1.5"/>
+          <text x="340" y="12" fill="#777" font-size="9" font-family="Red Hat Display, sans-serif">Official</text>
+          <rect x="380" y="2" width="14" height="14" rx="3" fill="none" stroke="#3E8635" stroke-width="1.5"/>
+          <text x="400" y="12" fill="#777" font-size="9" font-family="Red Hat Display, sans-serif">AI/Model</text>
+          <rect x="450" y="2" width="14" height="14" rx="3" fill="none" stroke="#6753AC" stroke-width="1.5"/>
+          <text x="470" y="12" fill="#777" font-size="9" font-family="Red Hat Display, sans-serif">Testing</text>
+        </g>
+      </svg>
+    </div>
+
+    <!-- Component detail cards -->
     <div class="cards">
       <div class="card">
         <h3><span class="icon icon-red">Q</span> Quarkus MCP Server</h3>
-        <p>Custom Java server with 19 operational tools for monitoring, deployment, and performance testing. Built with Fabric8 Kubernetes Client.</p>
+        <p>Custom Java server with 19 operational tools for monitoring, deployment, and performance testing. Built with Quarkus 3.27 and Fabric8 Kubernetes Client.</p>
         <ul>
-          <li>checkClusterHealth</li>
-          <li>getPerformanceMetrics</li>
-          <li>createDeployment</li>
-          <li>deployDatabase</li>
-          <li>runKubeBurner</li>
-          <li>+ 14 more tools</li>
+          <li>checkClusterHealth / getPerformanceMetrics</li>
+          <li>detectResourceIssues / analyzePodDisruptions</li>
+          <li>createDeployment / deployDatabase</li>
+          <li>runKubeBurner / runStorageBenchmark</li>
+          <li>+ 11 more tools</li>
         </ul>
       </div>
       <div class="card">
         <h3><span class="icon icon-blue">K</span> Kubernetes MCP Server</h3>
-        <p>Official Go-based server from <a href="https://github.com/openshift/openshift-mcp-server">openshift/openshift-mcp-server</a>. Generic CRUD, pod management, Helm operations.</p>
+        <p>Official Go-based server from <a href="https://github.com/openshift/openshift-mcp-server">openshift/openshift-mcp-server</a>. Generic CRUD, pod management, and Helm operations.</p>
         <ul>
           <li>resources_list / get / create / delete</li>
-          <li>pods_exec / pods_log</li>
-          <li>helm_install / helm_list</li>
-          <li>events_list / namespaces_list</li>
-          <li>nodes_top / pods_top</li>
-          <li>+ 10 more tools</li>
+          <li>pods_exec / pods_log / pods_top</li>
+          <li>helm_install / helm_list / helm_uninstall</li>
+          <li>namespaces_list / events_list / nodes_top</li>
+          <li>+ 9 more tools</li>
         </ul>
       </div>
       <div class="card">
         <h3><span class="icon icon-green">+</span> Supporting Services</h3>
-        <p>Included in the Helm chart for a complete AI-assisted operations stack.</p>
+        <p>Complete AI-assisted operations stack included in the Helm chart for end-to-end MCP server deployment.</p>
         <ul>
-          <li>MCP Inspector (testing UI)</li>
-          <li>LiteLLM Proxy (OpenAI compat)</li>
-          <li>PostgreSQL (LiteLLM backend)</li>
+          <li>LiteLLM Proxy (OpenAI-compatible API gateway)</li>
+          <li>PostgreSQL (LiteLLM backend database)</li>
+          <li>MCP Inspector (testing &amp; debugging UI)</li>
+          <li>RHOAI vLLM (model serving backend)</li>
         </ul>
       </div>
     </div>
   </section>
 
+  <!-- ═══ OPENSHIFT AI INTEGRATION ═══ -->
+  <section>
+    <h2>OpenShift AI Integration</h2>
+    <p class="section-subtitle">The MCP Server integrates with Red Hat OpenShift AI (RHOAI) for model serving. vLLM serves Qwen3 8B or Granite models with native tool calling support via the hermes parser.</p>
+
+    <div class="gallery-grid">
+      <div class="gallery-item">
+        <a href="{{ site.baseurl }}/rhoai-model-serving.png" class="screenshot-link gallery-img-wrap" data-caption="RHOAI Single-model serving with vLLM runtime — Qwen3 8B InferenceService deployed and ready">
+          <img src="{{ site.baseurl }}/rhoai-model-serving.png" alt="RHOAI Model Serving">
+        </a>
+        <div class="gallery-caption">
+          <h4>RHOAI Model Serving</h4>
+          <p>vLLM InferenceService with Qwen3 8B model deployed via OpenShift AI single-model serving</p>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <a href="{{ site.baseurl }}/rhoai-workbench.png" class="screenshot-link gallery-img-wrap" data-caption="OpenShift AI Data Science Project with model serving components configured for MCP tool calling">
+          <img src="{{ site.baseurl }}/rhoai-workbench.png" alt="RHOAI Data Science Project">
+        </a>
+        <div class="gallery-caption">
+          <h4>OpenShift AI Project</h4>
+          <p>Data Science Project with model serving runtime configured for native tool calling</p>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <a href="{{ site.baseurl }}/rhoai-serving-runtime.png" class="screenshot-link gallery-img-wrap" data-caption="vLLM ServingRuntime configuration with hermes tool-call parser and chat template for Qwen3 8B">
+          <img src="{{ site.baseurl }}/rhoai-serving-runtime.png" alt="vLLM ServingRuntime">
+        </a>
+        <div class="gallery-caption">
+          <h4>vLLM Serving Runtime</h4>
+          <p>ServingRuntime configuration with hermes tool-call parser enabling native function calling</p>
+        </div>
+      </div>
+    </div>
+
+    <h3>vLLM Configuration for Tool Calling</h3>
+    <pre><code>apiVersion: serving.kserve.io/v1beta1
+kind: InferenceService
+metadata:
+  name: isvc-qwen3-8b
+spec:
+  predictor:
+    model:
+      modelFormat:
+        name: vLLM
+      runtime: vllm-runtime
+      args:
+        - --enable-auto-tool-choice
+        - --tool-call-parser=hermes
+        - --chat-template=/app/data/template_hermes_tool.jinja</code></pre>
+  </section>
+
+  <!-- ═══ LIGHTSPEED IN ACTION ═══ -->
+  <section>
+    <h2>Lightspeed in Action</h2>
+    <p class="section-subtitle">OpenShift Lightspeed uses the MCP tools to perform intelligent cluster operations through natural language. The LLM reasons about which tool to call and processes the results.</p>
+
+    <div class="gallery-grid">
+      <div class="gallery-item full-width">
+        <a href="{{ site.baseurl }}/lightspeed-response.png" class="screenshot-link gallery-img-wrap" data-caption="Qwen3 8B model reasoning about which MCP tool to call (checkClusterHealth) via OpenShift Lightspeed">
+          <img src="{{ site.baseurl }}/lightspeed-response.png" alt="Lightspeed Tool Calling">
+        </a>
+        <div class="gallery-caption">
+          <h4>Lightspeed Tool Calling</h4>
+          <p>Qwen3 8B model reasoning about which MCP tool to call (checkClusterHealth) and processing the cluster health results</p>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <a href="{{ site.baseurl }}/lightspeed-cluster-health.png" class="screenshot-link gallery-img-wrap" data-caption="Lightspeed analyzing failed pods and high-restart containers using checkClusterHealth tool results">
+          <img src="{{ site.baseurl }}/lightspeed-cluster-health.png" alt="Cluster Health Analysis">
+        </a>
+        <div class="gallery-caption">
+          <h4>Cluster Health Analysis</h4>
+          <p>Lightspeed analyzing failed pods and high-restart containers using checkClusterHealth tool results</p>
+        </div>
+      </div>
+      <div class="gallery-item">
+        <a href="{{ site.baseurl }}/pods-with-high-cpu-memory.png" class="screenshot-link gallery-img-wrap" data-caption="detectResourceIssues tool identifying pods with excessive restarts and high resource consumption">
+          <img src="{{ site.baseurl }}/pods-with-high-cpu-memory.png" alt="Detect Resource Issues">
+        </a>
+        <div class="gallery-caption">
+          <h4>Detect Resource Issues</h4>
+          <p>detectResourceIssues identifying pods with excessive restarts and high resource consumption</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ HELM CHART ═══ -->
   <section>
     <h2>Helm Chart</h2>
     <table>
@@ -75,7 +431,7 @@ title: OpenShift MCP Server
         <tr><th>Version</th><th>App Version</th><th>Description</th></tr>
       </thead>
       <tbody>
-        <tr><td><code>0.1.0-alpha</code></td><td><code>0.1.0-alpha</code></td><td>Dual MCP server + Inspector + LiteLLM (experimental)</td></tr>
+        <tr><td><code>0.1.0-alpha</code></td><td><code>0.1.0-alpha</code></td><td>Dual MCP server + Inspector + LiteLLM + RHOAI integration (experimental)</td></tr>
       </tbody>
     </table>
 
@@ -83,71 +439,83 @@ title: OpenShift MCP Server
     <pre><code>helm repo add openshift-mcp https://maximilianoPizarro.github.io/openshift-mcp-server
 helm repo update</code></pre>
 
-    <h3>Install</h3>
+    <h3>Full Install (cluster-admin required)</h3>
     <pre><code>helm install openshift-mcp-server openshift-mcp/openshift-mcp-server \
   --namespace openshift-lightspeed \
   --set namespace=openshift-lightspeed \
   --set serviceAccount.create=true</code></pre>
 
+    <h3>Developer Sandbox Install (Qwen3 8B, namespace-scoped)</h3>
+    <pre><code>helm install openshift-mcp-server openshift-mcp/openshift-mcp-server \
+  --namespace $NAMESPACE \
+  -f values-developer-sandbox.yaml</code></pre>
+
+    <div class="permission-callout warn" style="margin-top:1rem">
+      <span class="permission-icon">&#9888;</span>
+      <span><strong>Developer Sandbox note:</strong> In sandbox mode, the ServiceAccount uses a namespace-scoped Role instead of a ClusterRoleBinding. Only tools compatible with namespace-level permissions are functional. Cluster-wide monitoring, node-level diagnostics, and KubeBurner density tests require the full version with cluster-admin.</span>
+    </div>
+
     <h3>Configure with an existing RHOAI model</h3>
     <pre><code>helm install openshift-mcp-server openshift-mcp/openshift-mcp-server \
   --namespace openshift-lightspeed \
   --set namespace=openshift-lightspeed \
-  --set litellm.model.name=llama-32-3b-instruct \
-  --set litellm.model.modelId=llama-32-3b-instruct \
-  --set litellm.model.apiBase=http://llama-32-3b-instruct-openai.my-first-model.svc.cluster.local/v1</code></pre>
+  --set litellm.model.name=qwen3 \
+  --set litellm.model.modelId=isvc-qwen3-8b \
+  --set litellm.model.apiBase=http://isvc-qwen3-8b-predictor.qwen3-model.svc.cluster.local:8080/v1</code></pre>
   </section>
 
+  <!-- ═══ CUSTOM TOOLS ═══ -->
   <section>
     <h2>Custom Tools (Quarkus Server)</h2>
 
     <h3>Monitoring (9 tools)</h3>
     <table>
       <thead>
-        <tr><th>Tool</th><th>Description</th></tr>
+        <tr><th>Tool</th><th>Description</th><th>Scope</th></tr>
       </thead>
       <tbody>
-        <tr><td><code>checkClusterHealth</code></td><td>Overall cluster health, node/pod status, critical issues</td></tr>
-        <tr><td><code>getPerformanceMetrics</code></td><td>Node and pod CPU/memory metrics</td></tr>
-        <tr><td><code>detectResourceIssues</code></td><td>Pods with high CPU/memory or excessive restarts</td></tr>
-        <tr><td><code>analyzePodDisruptions</code></td><td>Evictions, OOM kills, restart patterns</td></tr>
-        <tr><td><code>checkNodeConditions</code></td><td>Node conditions, taints, allocatable resources</td></tr>
-        <tr><td><code>monitorDeployments</code></td><td>Deployment rollout health and replica status</td></tr>
-        <tr><td><code>checkKubeletStatus</code></td><td>Kubelet service status and journal logs</td></tr>
-        <tr><td><code>checkCrioStatus</code></td><td>CRI-O container runtime status</td></tr>
-        <tr><td><code>analyzeJournalctlPodErrors</code></td><td>Journal log analysis with filters</td></tr>
+        <tr><td><code>checkClusterHealth</code></td><td>Overall cluster health, node/pod status, critical issues</td><td>cluster-admin</td></tr>
+        <tr><td><code>getPerformanceMetrics</code></td><td>Node and pod CPU/memory metrics via Metrics API</td><td>cluster-admin</td></tr>
+        <tr><td><code>detectResourceIssues</code></td><td>Pods with high CPU/memory or excessive restarts</td><td>namespace</td></tr>
+        <tr><td><code>analyzePodDisruptions</code></td><td>Evictions, OOM kills, restart patterns</td><td>namespace</td></tr>
+        <tr><td><code>checkNodeConditions</code></td><td>Node conditions, taints, allocatable resources</td><td>cluster-admin</td></tr>
+        <tr><td><code>monitorDeployments</code></td><td>Deployment rollout health and replica status</td><td>namespace</td></tr>
+        <tr><td><code>checkKubeletStatus</code></td><td>Kubelet service status and journal logs</td><td>cluster-admin</td></tr>
+        <tr><td><code>checkCrioStatus</code></td><td>CRI-O container runtime status</td><td>cluster-admin</td></tr>
+        <tr><td><code>analyzeJournalctlPodErrors</code></td><td>Journal log analysis with filters</td><td>cluster-admin</td></tr>
       </tbody>
     </table>
 
     <h3>Deployment (5 tools)</h3>
     <table>
       <thead>
-        <tr><th>Tool</th><th>Description</th></tr>
+        <tr><th>Tool</th><th>Description</th><th>Scope</th></tr>
       </thead>
       <tbody>
-        <tr><td><code>createDeployment</code></td><td>Create deployments with custom config</td></tr>
-        <tr><td><code>deployDatabase</code></td><td>Deploy PostgreSQL/MySQL/MongoDB/Redis (RHEL images)</td></tr>
-        <tr><td><code>createHpa</code></td><td>Configure horizontal pod autoscalers</td></tr>
-        <tr><td><code>createService</code></td><td>Create ClusterIP/NodePort/LoadBalancer services</td></tr>
-        <tr><td><code>createNetworkPolicy</code></td><td>Create network policies</td></tr>
+        <tr><td><code>createDeployment</code></td><td>Create deployments with custom config</td><td>namespace</td></tr>
+        <tr><td><code>deployDatabase</code></td><td>Deploy PostgreSQL/MySQL/MongoDB/Redis (RHEL images)</td><td>namespace</td></tr>
+        <tr><td><code>createHpa</code></td><td>Configure horizontal pod autoscalers</td><td>namespace</td></tr>
+        <tr><td><code>createService</code></td><td>Create ClusterIP/NodePort/LoadBalancer services</td><td>namespace</td></tr>
+        <tr><td><code>createNetworkPolicy</code></td><td>Create network policies</td><td>namespace</td></tr>
       </tbody>
     </table>
 
     <h3>Performance Testing (5 tools)</h3>
     <table>
       <thead>
-        <tr><th>Tool</th><th>Description</th></tr>
+        <tr><th>Tool</th><th>Description</th><th>Scope</th></tr>
       </thead>
       <tbody>
-        <tr><td><code>runKubeBurner</code></td><td>Cluster density testing</td></tr>
-        <tr><td><code>runStorageBenchmark</code></td><td>Storage I/O benchmarks with FIO</td></tr>
-        <tr><td><code>runNetworkTest</code></td><td>Network throughput with iperf3</td></tr>
-        <tr><td><code>runCpuStressTest</code></td><td>CPU/memory stress testing</td></tr>
-        <tr><td><code>runDatabaseBenchmark</code></td><td>Database benchmarks</td></tr>
+        <tr><td><code>runKubeBurner</code></td><td>Cluster density testing</td><td>cluster-admin</td></tr>
+        <tr><td><code>runStorageBenchmark</code></td><td>Storage I/O benchmarks with FIO</td><td>namespace</td></tr>
+        <tr><td><code>runNetworkTest</code></td><td>Network throughput with iperf3</td><td>namespace</td></tr>
+        <tr><td><code>runCpuStressTest</code></td><td>CPU/memory stress testing</td><td>namespace</td></tr>
+        <tr><td><code>runDatabaseBenchmark</code></td><td>Database benchmarks</td><td>namespace</td></tr>
       </tbody>
     </table>
   </section>
 
+  <!-- ═══ KUBERNETES MCP TOOLS ═══ -->
   <section>
     <h2>Kubernetes MCP Tools (Official Server)</h2>
     <table>
@@ -162,101 +530,107 @@ helm repo update</code></pre>
     </table>
   </section>
 
+  <!-- ═══ SCREENSHOTS GALLERY ═══ -->
   <section>
     <h2>Screenshots</h2>
-    <div class="cards">
-      <div class="card" style="flex:1 1 100%;max-width:100%">
-        <h3>OpenShift Topology View</h3>
-        <a href="{{ site.baseurl }}/topology-view.png" class="screenshot-link" data-caption="MCP Server pods running in the openshift-lightspeed namespace with OpenShift logos">
-          <img src="{{ site.baseurl }}/topology-view.png" alt="OpenShift Topology View" style="width:100%;border-radius:6px;border:1px solid #333">
+
+    <div class="gallery-grid">
+      <div class="gallery-item full-width">
+        <a href="{{ site.baseurl }}/topology-view.png" class="screenshot-link gallery-img-wrap" data-caption="OpenShift Topology View — MCP Server pods running in the openshift-lightspeed namespace with OpenShift logos and service connectors">
+          <img src="{{ site.baseurl }}/topology-view.png" alt="OpenShift Topology View">
         </a>
-        <p style="margin-top:8px;font-size:0.85em;color:#999">MCP Server pods running in the openshift-lightspeed namespace with OpenShift logos</p>
-      </div>
-      <div class="card" style="flex:1 1 100%;max-width:100%">
-        <h3>Lightspeed Tool Calling</h3>
-        <a href="{{ site.baseurl }}/lightspeed-response.png" class="screenshot-link" data-caption="Qwen3 8B model reasoning about which MCP tool to call (checkClusterHealth)">
-          <img src="{{ site.baseurl }}/lightspeed-response.png" alt="Lightspeed Tool Response" style="width:100%;border-radius:6px;border:1px solid #333">
-        </a>
-        <p style="margin-top:8px;font-size:0.85em;color:#999">Qwen3 8B model reasoning about which MCP tool to call (checkClusterHealth)</p>
-      </div>
-      <div class="card" style="flex:1 1 100%;max-width:100%">
-        <h3>Cluster Health Analysis</h3>
-        <a href="{{ site.baseurl }}/lightspeed-cluster-health.png" class="screenshot-link" data-caption="Lightspeed analyzing failed pods and high-restart containers using checkClusterHealth tool results">
-          <img src="{{ site.baseurl }}/lightspeed-cluster-health.png" alt="Cluster Health Analysis" style="width:100%;border-radius:6px;border:1px solid #333">
-        </a>
-        <p style="margin-top:8px;font-size:0.85em;color:#999">Lightspeed analyzing failed pods and high-restart containers using checkClusterHealth tool results</p>
-      </div>
-      <div class="card" style="flex:1 1 100%;max-width:100%">
-        <h3>List Pods (pods_list)</h3>
-        <a href="{{ site.baseurl }}/test-list-pods.png" class="screenshot-link" data-caption="Listing pods in openshift-lightspeed namespace using the pods_list_in_namespace tool">
-          <img src="{{ site.baseurl }}/test-list-pods.png" alt="List Pods" style="width:100%;border-radius:6px;border:1px solid #333">
-        </a>
-        <p style="margin-top:8px;font-size:0.85em;color:#999">Listing pods in openshift-lightspeed namespace using the pods_list_in_namespace tool</p>
-      </div>
-      <div class="card" style="flex:1 1 100%;max-width:100%">
-        <h3>Detect Resource Issues</h3>
-        <a href="{{ site.baseurl }}/pods-with-high-cpu-memory.png" class="screenshot-link" data-caption="detectResourceIssues tool identifying pods with excessive restarts and high resource consumption">
-          <img src="{{ site.baseurl }}/pods-with-high-cpu-memory.png" alt="Detect Resource Issues" style="width:100%;border-radius:6px;border:1px solid #333">
-        </a>
-        <p style="margin-top:8px;font-size:0.85em;color:#999">detectResourceIssues tool identifying pods with excessive restarts and high resource consumption</p>
-      </div>
-      <div class="card" style="flex:1 1 100%;max-width:100%">
-        <h3>Deploy Redis Database</h3>
-        <a href="{{ site.baseurl }}/deploy-redis.png" class="screenshot-link" data-caption="deployDatabase tool deploying a Redis instance using official RHEL catalog image">
-          <img src="{{ site.baseurl }}/deploy-redis.png" alt="Deploy Redis" style="width:100%;border-radius:6px;border:1px solid #333">
-        </a>
-        <p style="margin-top:8px;font-size:0.85em;color:#999">deployDatabase tool deploying a Redis instance using official RHEL catalog image</p>
-      </div>
-      <div class="card" style="flex:1 1 100%;max-width:100%">
-        <h3>Create HPA (Horizontal Pod Autoscaler)</h3>
-        <a href="{{ site.baseurl }}/create-hpa.png" class="screenshot-link" data-caption="createHpa tool configuring auto-scaling with CPU/memory targets">
-          <img src="{{ site.baseurl }}/create-hpa.png" alt="Create HPA" style="width:100%;border-radius:6px;border:1px solid #333">
-        </a>
-        <p style="margin-top:8px;font-size:0.85em;color:#999">createHpa tool configuring auto-scaling with CPU/memory targets</p>
-      </div>
-      <div class="card" style="flex:1 1 100%;max-width:100%">
-        <h3>Helm List Releases</h3>
-        <a href="{{ site.baseurl }}/helm_list.png" class="screenshot-link" data-caption="helm_list tool showing all Helm releases across namespaces">
-          <img src="{{ site.baseurl }}/helm_list.png" alt="Helm List" style="width:100%;border-radius:6px;border:1px solid #333">
-        </a>
-        <p style="margin-top:8px;font-size:0.85em;color:#999">helm_list tool showing all Helm releases across namespaces</p>
-      </div>
-      <div class="card" style="flex:1 1 100%;max-width:100%">
-        <h3>Helm Chart in OpenShift Catalog</h3>
-        <a href="{{ site.baseurl }}/helm-catalog.png" class="screenshot-link" data-caption="OpenShift MCP Server Helm Chart available in the OpenShift Developer Catalog via HelmChartRepository">
-          <img src="{{ site.baseurl }}/helm-catalog.png" alt="Helm Chart Catalog" style="width:100%;border-radius:6px;border:1px solid #333">
-        </a>
-        <p style="margin-top:8px;font-size:0.85em;color:#999">OpenShift MCP Server Helm Chart available in the OpenShift Developer Catalog via HelmChartRepository</p>
+        <div class="gallery-caption">
+          <h4>OpenShift Topology View</h4>
+          <p>MCP Server pods with OpenShift logos, service connectors, and routes in the openshift-lightspeed namespace</p>
+        </div>
       </div>
 
-      <div class="card" style="flex:1 1 100%;max-width:100%">
-        <h3>MCP Inspector - 19 Tools Connected</h3>
-        <a href="{{ site.baseurl }}/mcp-inspector.png" class="screenshot-link" data-caption="MCP Inspector connected to the OpenShift MCP Server showing all 19 available tools for cluster monitoring, deployment, and performance testing">
-          <img src="{{ site.baseurl }}/mcp-inspector.png" alt="MCP Inspector" style="width:100%;border-radius:6px;border:1px solid #333">
+      <div class="gallery-item">
+        <a href="{{ site.baseurl }}/mcp-inspector.png" class="screenshot-link gallery-img-wrap" data-caption="MCP Inspector connected to the OpenShift MCP Server showing all 19 available tools">
+          <img src="{{ site.baseurl }}/mcp-inspector.png" alt="MCP Inspector">
         </a>
-        <p style="margin-top:8px;font-size:0.85em;color:#999">MCP Inspector connected to the OpenShift MCP Server showing all 19 available tools</p>
+        <div class="gallery-caption">
+          <h4>MCP Inspector &mdash; 19 Tools</h4>
+          <p>MCP Inspector connected showing all 19 available tools for monitoring, deployment, and testing</p>
+        </div>
       </div>
 
-      <div class="card" style="flex:1 1 100%;max-width:100%">
-        <h3>LiteLLM - Model Management (Qwen3 8B)</h3>
-        <a href="{{ site.baseurl }}/litellm-models.png" class="screenshot-link" data-caption="LiteLLM dashboard showing Qwen3 8B model configured as the AI backend with OpenAI-compatible API">
-          <img src="{{ site.baseurl }}/litellm-models.png" alt="LiteLLM Models" style="width:100%;border-radius:6px;border:1px solid #333">
+      <div class="gallery-item">
+        <a href="{{ site.baseurl }}/test-list-pods.png" class="screenshot-link gallery-img-wrap" data-caption="pods_list tool listing pods in the openshift-lightspeed namespace">
+          <img src="{{ site.baseurl }}/test-list-pods.png" alt="List Pods">
         </a>
-        <p style="margin-top:8px;font-size:0.85em;color:#999">LiteLLM dashboard showing Qwen3 8B model configured as the AI backend</p>
+        <div class="gallery-caption">
+          <h4>List Pods (pods_list)</h4>
+          <p>Listing pods in openshift-lightspeed namespace via the Kubernetes MCP Server</p>
+        </div>
       </div>
 
-      <div class="card" style="flex:1 1 100%;max-width:100%">
-        <h3>LiteLLM - MCP Servers Configuration</h3>
-        <a href="{{ site.baseurl }}/litellm-mcp-servers.png" class="screenshot-link" data-caption="LiteLLM MCP Servers page showing both openshift_mcp_server (Quarkus) and kubernetes_mcp_server (Go) connected via HTTP transport">
-          <img src="{{ site.baseurl }}/litellm-mcp-servers.png" alt="LiteLLM MCP Servers" style="width:100%;border-radius:6px;border:1px solid #333">
+      <div class="gallery-item">
+        <a href="{{ site.baseurl }}/deploy-redis.png" class="screenshot-link gallery-img-wrap" data-caption="deployDatabase tool deploying a Redis instance using official RHEL catalog image">
+          <img src="{{ site.baseurl }}/deploy-redis.png" alt="Deploy Redis">
         </a>
-        <p style="margin-top:8px;font-size:0.85em;color:#999">LiteLLM MCP Servers page showing both MCP servers connected via HTTP transport</p>
+        <div class="gallery-caption">
+          <h4>Deploy Redis Database</h4>
+          <p>deployDatabase tool deploying a Redis instance using official RHEL catalog image</p>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <a href="{{ site.baseurl }}/create-hpa.png" class="screenshot-link gallery-img-wrap" data-caption="createHpa tool configuring auto-scaling with CPU/memory targets">
+          <img src="{{ site.baseurl }}/create-hpa.png" alt="Create HPA">
+        </a>
+        <div class="gallery-caption">
+          <h4>Create HPA</h4>
+          <p>createHpa tool configuring horizontal pod autoscaling with CPU/memory targets</p>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <a href="{{ site.baseurl }}/helm_list.png" class="screenshot-link gallery-img-wrap" data-caption="helm_list tool showing all Helm releases across namespaces">
+          <img src="{{ site.baseurl }}/helm_list.png" alt="Helm List">
+        </a>
+        <div class="gallery-caption">
+          <h4>Helm Releases</h4>
+          <p>helm_list tool showing all Helm releases deployed across namespaces</p>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <a href="{{ site.baseurl }}/helm-catalog.png" class="screenshot-link gallery-img-wrap" data-caption="OpenShift MCP Server available in the OpenShift Developer Catalog via HelmChartRepository">
+          <img src="{{ site.baseurl }}/helm-catalog.png" alt="Helm Chart Catalog">
+        </a>
+        <div class="gallery-caption">
+          <h4>Helm Chart in OpenShift Catalog</h4>
+          <p>OpenShift MCP Server available in the Developer Catalog via HelmChartRepository</p>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <a href="{{ site.baseurl }}/litellm-models.png" class="screenshot-link gallery-img-wrap" data-caption="LiteLLM dashboard showing Qwen3 8B model configured as the AI backend">
+          <img src="{{ site.baseurl }}/litellm-models.png" alt="LiteLLM Models">
+        </a>
+        <div class="gallery-caption">
+          <h4>LiteLLM &mdash; Qwen3 8B Model</h4>
+          <p>LiteLLM dashboard with Qwen3 8B configured via RHOAI vLLM backend</p>
+        </div>
+      </div>
+
+      <div class="gallery-item">
+        <a href="{{ site.baseurl }}/litellm-mcp-servers.png" class="screenshot-link gallery-img-wrap" data-caption="LiteLLM MCP Servers page showing both MCP servers connected via HTTP transport">
+          <img src="{{ site.baseurl }}/litellm-mcp-servers.png" alt="LiteLLM MCP Servers">
+        </a>
+        <div class="gallery-caption">
+          <h4>LiteLLM &mdash; MCP Servers</h4>
+          <p>Both Quarkus and Kubernetes MCP servers connected via Streamable HTTP transport</p>
+        </div>
       </div>
     </div>
   </section>
 
+  <!-- ═══ OLSConfig ═══ -->
   <section>
     <h2>OLSConfig Integration</h2>
+    <p class="section-subtitle">Register MCP servers with OpenShift Lightspeed via the OLSConfig custom resource. Requires the MCPServer feature gate enabled.</p>
     <pre><code>apiVersion: ols.openshift.io/v1alpha1
 kind: OLSConfig
 metadata:
@@ -273,6 +647,7 @@ spec:
       url: 'http://openshift-mcp-server-k8s-mcp.openshift-lightspeed.svc.cluster.local:8085/mcp'</code></pre>
   </section>
 
+  <!-- ═══ TECHNOLOGY STACK ═══ -->
   <section>
     <h2>Technology Stack</h2>
     <table>
@@ -283,13 +658,16 @@ spec:
         <tr><td>Custom MCP Server</td><td>Quarkus 3.27.3 + Fabric8 Kubernetes Client</td></tr>
         <tr><td>Official MCP Server</td><td>Go (<a href="https://github.com/openshift/openshift-mcp-server">openshift/openshift-mcp-server</a>)</td></tr>
         <tr><td>MCP Protocol</td><td>Streamable HTTP (POST /mcp)</td></tr>
+        <tr><td>Model Serving</td><td>OpenShift AI (RHOAI) + vLLM with hermes tool-call parser</td></tr>
+        <tr><td>LLM Models</td><td>Qwen3 8B, Granite 3 8B Instruct (configurable)</td></tr>
+        <tr><td>LLM Gateway</td><td>LiteLLM Proxy (OpenAI-compatible API)</td></tr>
         <tr><td>Container Runtime</td><td>UBI9 OpenJDK 21 Runtime</td></tr>
-        <tr><td>Helm Chart</td><td>v2 with 5 deployments</td></tr>
-        <tr><td>LLM Integration</td><td>LiteLLM proxy (OpenAI compatible)</td></tr>
+        <tr><td>Helm Chart</td><td>v2 with 5 deployments, namespace &amp; cluster-admin modes</td></tr>
       </tbody>
     </table>
   </section>
 
+  <!-- ═══ HELM COMPONENTS ═══ -->
   <section>
     <h2>Helm Chart Components</h2>
     <table>
@@ -297,11 +675,11 @@ spec:
         <tr><th>Component</th><th>Image</th><th>Port</th><th>Description</th></tr>
       </thead>
       <tbody>
-        <tr><td><strong>openshift-mcp-server</strong></td><td><code>quay.io/maximilianopizarro/openshift-mcp-server</code></td><td>8080</td><td>Custom Quarkus MCP</td></tr>
-        <tr><td><strong>kubernetes-mcp-server</strong></td><td><code>quay.io/redhat-user-workloads/.../openshift-mcp-server</code></td><td>8085</td><td>Official K8s MCP</td></tr>
-        <tr><td><strong>mcp-inspector</strong></td><td><code>mcpuse/inspector</code></td><td>8080</td><td>MCP testing UI</td></tr>
-        <tr><td><strong>litellm</strong></td><td><code>litellm/litellm-non_root</code></td><td>4000</td><td>OpenAI-compatible proxy</td></tr>
-        <tr><td><strong>litellm-db</strong></td><td><code>registry.redhat.io/rhel9/postgresql-15</code></td><td>5432</td><td>PostgreSQL backend</td></tr>
+        <tr><td><strong>openshift-mcp-server</strong></td><td><code>quay.io/maximilianopizarro/openshift-mcp-server</code></td><td>8080</td><td>Custom Quarkus MCP (19 tools)</td></tr>
+        <tr><td><strong>kubernetes-mcp-server</strong></td><td><code>quay.io/redhat-user-workloads/.../openshift-mcp-server</code></td><td>8085</td><td>Official K8s MCP (21 tools)</td></tr>
+        <tr><td><strong>mcp-inspector</strong></td><td><code>mcpuse/inspector</code></td><td>8080</td><td>MCP testing &amp; debugging UI</td></tr>
+        <tr><td><strong>litellm</strong></td><td><code>litellm/litellm-non_root</code></td><td>4000</td><td>OpenAI-compatible LLM proxy</td></tr>
+        <tr><td><strong>litellm-db</strong></td><td><code>registry.redhat.io/rhel9/postgresql-15</code></td><td>5432</td><td>PostgreSQL backend for LiteLLM</td></tr>
       </tbody>
     </table>
   </section>

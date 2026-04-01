@@ -43,6 +43,7 @@ affinity: {}
 serviceAccount:
   create: true
   name: openshift-mcp-server
+  scope: cluster
   clusterRole: cluster-admin
 
 inspector:
