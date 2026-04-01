@@ -4,18 +4,57 @@ description: Enterprise MCP Server for OpenShift Lightspeed - cluster monitoring
 type: application
 version: 1.0.0
 appVersion: "1.0.0"
+kubeVersion: ">=1.25.0-0"
+home: https://maximilianoPizarro.github.io/openshift-mcp-server
 keywords:
   - openshift
   - mcp
   - lightspeed
   - monitoring
   - kubernetes
+  - ai
+  - model-context-protocol
+  - quarkus
+  - vllm
+  - tool-calling
 maintainers:
   - name: maximilianoPizarro
+    email: maximiliano.pizarro.5@gmail.com
     url: https://github.com/maximilianoPizarro
 sources:
   - https://github.com/maximilianoPizarro/openshift-mcp-server
+  - https://github.com/openshift/openshift-mcp-server
 icon: https://maximilianoPizarro.github.io/openshift-mcp-server/openshift-logo.png
 annotations:
   artifacthub.io/category: monitoring
   artifacthub.io/license: Apache-2.0
+  artifacthub.io/operator: "false"
+  artifacthub.io/containsSecurityUpdates: "false"
+  artifacthub.io/prerelease: "false"
+  artifacthub.io/signKey: ""
+  artifacthub.io/links: |
+    - name: Documentation
+      url: https://maximilianoPizarro.github.io/openshift-mcp-server
+    - name: Source Code
+      url: https://github.com/maximilianoPizarro/openshift-mcp-server
+    - name: Container Image
+      url: https://quay.io/repository/maximilianopizarro/openshift-mcp-server
+  artifacthub.io/maintainers: |
+    - name: maximilianoPizarro
+      email: maximiliano.pizarro.5@gmail.com
+  artifacthub.io/recommendations: |
+    - url: https://artifacthub.io/packages/helm/openshift/openshift-lightspeed
+  artifacthub.io/screenshots: |
+    - title: OpenShift MCP Server Architecture
+      url: https://maximilianoPizarro.github.io/openshift-mcp-server/openshift-logo.png
+  artifacthub.io/changes: |
+    - kind: added
+      description: 19 MCP tools for cluster monitoring, deployment, and performance testing
+    - kind: added
+      description: Official Kubernetes MCP Server integration (openshift/openshift-mcp-server)
+    - kind: added
+      description: MCP Inspector UI for testing and debugging
+    - kind: added
+      description: LiteLLM proxy with Qwen3 8B model support
+    - kind: added
+      description: Native tool calling via vLLM hermes parser
