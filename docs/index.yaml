@@ -50,10 +50,10 @@ entries:
           url: https://maximilianoPizarro.github.io/openshift-mcp-server/helm-catalog.png
     apiVersion: v2
     appVersion: 0.1.0-alpha
-    created: "2026-04-01T12:49:46.0667746-03:00"
+    created: "2026-04-01T12:55:41.7072613-03:00"
     description: '[EXPERIMENTAL] Enterprise MCP Server for OpenShift Lightspeed -
       cluster monitoring, deployment management, and performance testing'
-    digest: 438e7625c72bcdd7c6a78316bdb10e791b70440291f4fac063f95f66a26d7805
+    digest: 7e63454540908bb6e352fa0f4c6ec4872f10541fdc175b0880b2b514b3620f3e
     home: https://maximilianoPizarro.github.io/openshift-mcp-server
     icon: https://maximilianoPizarro.github.io/openshift-mcp-server/openshift-logo.png
     keywords:
@@ -80,4 +80,4 @@ entries:
     urls:
     - https://maximilianoPizarro.github.io/openshift-mcp-server/openshift-mcp-server-0.1.0-alpha.tgz
     version: 0.1.0-alpha
-generated: "2026-04-01T12:49:46.0641156-03:00"
+generated: "2026-04-01T12:55:41.7051535-03:00"

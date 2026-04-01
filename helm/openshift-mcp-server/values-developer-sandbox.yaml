@@ -2,8 +2,9 @@
 # OpenShift MCP Server - Developer Sandbox Edition
 # ============================================================================
 # Optimized for Red Hat Developer Sandbox environments with:
-#   - Namespace-scoped RBAC (no cluster-admin required)
-#   - Qwen3 8B model via RHOAI vLLM
+#   - Uses the default ServiceAccount (no new SA created)
+#   - Namespace-scoped Role + RoleBinding for the default SA
+#   - Qwen3 8B model via shared sandbox-shared-models namespace
 #   - Limited tool availability based on ServiceAccount permissions
 #
 # IMPORTANT: In Developer Sandbox, only tools that operate within the
@@ -13,7 +14,8 @@
 # Usage:
 #   helm install openshift-mcp-server openshift-mcp/openshift-mcp-server \
 #     --namespace $NAMESPACE \
-#     -f values-developer-sandbox.yaml
+#     -f values-developer-sandbox.yaml \
+#     --set litellm.model.apiKey=$(oc whoami -t)
 # ============================================================================
 
 replicaCount: 1
@@ -51,10 +53,10 @@ livenessProbe:
   initialDelaySeconds: 10
   periodSeconds: 30
 
-# ── RBAC: Namespace-scoped (no cluster-admin) ──
+# ── RBAC: Use default SA, namespace-scoped Role ──
 serviceAccount:
-  create: true
-  name: openshift-mcp-server
+  create: false
+  name: default
   scope: namespace
   clusterRole: ""
 
@@ -82,7 +84,10 @@ inspector:
       cpu: 200m
       memory: 256Mi
 
-# ── LiteLLM with Qwen3 8B ──
+# ── LiteLLM with Qwen3 8B (sandbox-shared-models) ──
+# The model runs in sandbox-shared-models namespace behind oauth-proxy.
+# Access via HTTPS on port 8443 with OAuth bearer token.
+# Token expires ~24h, refresh with: --set litellm.model.apiKey=$(oc whoami -t)
 litellm:
   enabled: true
   image:
@@ -98,8 +103,8 @@ litellm:
   masterKey: "sk-openshift-mcp-1234"
   model:
     name: qwen3
-    modelId: isvc-qwen3-8b
-    apiBase: "http://isvc-qwen3-8b-predictor.qwen3-model.svc.cluster.local:8080/v1"
+    modelId: isvc-qwen3-8b-fp8
+    apiBase: "https://isvc-qwen3-8b-fp8-predictor.sandbox-shared-models.svc.cluster.local:8443/v1"
     apiKey: "dummy"
   postgres:
     enabled: true
@@ -124,7 +129,7 @@ litellm:
       cpu: "1"
       memory: 2Gi
 
-# ── Kubernetes MCP Server (namespace-scoped, read-only recommended) ──
+# ── Kubernetes MCP Server ──
 kubernetesMcp:
   enabled: true
   image:
