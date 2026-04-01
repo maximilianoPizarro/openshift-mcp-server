@@ -15,6 +15,15 @@ entries:
         - kind: added
           description: Native tool calling via vLLM hermes parser
       artifacthub.io/containsSecurityUpdates: "false"
+      artifacthub.io/images: |
+        - name: openshift-mcp-server
+          image: quay.io/maximilianopizarro/openshift-mcp-server:latest
+        - name: kubernetes-mcp-server
+          image: quay.io/redhat-user-workloads/crt-nshift-lightspeed-tenant/openshift-mcp-server:latest
+        - name: mcp-inspector
+          image: mcpuse/inspector:latest
+        - name: litellm
+          image: litellm/litellm-non_root:v1.82.3-stable
       artifacthub.io/license: Apache-2.0
       artifacthub.io/links: |
         - name: Documentation
@@ -35,10 +44,10 @@ entries:
           url: https://maximilianoPizarro.github.io/openshift-mcp-server/openshift-logo.png
     apiVersion: v2
     appVersion: 0.1.0-alpha
-    created: "2026-03-31T22:46:03.4249507-03:00"
+    created: "2026-04-01T09:02:45.3900523-03:00"
     description: '[EXPERIMENTAL] Enterprise MCP Server for OpenShift Lightspeed -
       cluster monitoring, deployment management, and performance testing'
-    digest: d3cdeef4df79f9e692d7633c8aa89dde75d6f4c7f1d8abb9f040175a2552baab
+    digest: 8415d55d7ba03a41f3313f1cbb298cac4dc28583ef9a9487b32f042bea1b24b5
     home: https://maximilianoPizarro.github.io/openshift-mcp-server
     icon: https://maximilianoPizarro.github.io/openshift-mcp-server/openshift-logo.png
     keywords:
@@ -65,4 +74,4 @@ entries:
     urls:
     - https://maximilianoPizarro.github.io/openshift-mcp-server/openshift-mcp-server-0.1.0-alpha.tgz
     version: 0.1.0-alpha
-generated: "2026-03-31T22:46:03.4225238-03:00"
+generated: "2026-04-01T09:02:45.3864357-03:00"
