@@ -22,6 +22,53 @@
 
 Dual MCP server deployment combining a custom **Quarkus** server (19 operational tools for monitoring, deployment, and performance testing) with the official **[openshift/openshift-mcp-server](https://github.com/openshift/openshift-mcp-server)** (generic Kubernetes CRUD, pod exec/logs, Helm management). Designed to integrate with **OpenShift Lightspeed** as an enterprise-grade AI assistant backend.
 
+## Screenshots
+
+### OpenShift Topology View
+<p align="center">
+  <img src="docs/topology-view.png" alt="OpenShift Topology" width="800">
+</p>
+
+### Lightspeed Tool Calling (Qwen3 8B)
+<p align="center">
+  <img src="docs/lightspeed-response.png" alt="Lightspeed Tool Calling" width="800">
+</p>
+
+### Cluster Health Analysis
+<p align="center">
+  <img src="docs/lightspeed-cluster-health.png" alt="Cluster Health Analysis" width="800">
+</p>
+
+### List Pods with pods_list Tool
+<p align="center">
+  <img src="docs/test-list-pods.png" alt="List Pods" width="800">
+</p>
+
+### Detect Resource Issues
+<p align="center">
+  <img src="docs/pods-with-high-cpu-memory.png" alt="Detect Resource Issues" width="800">
+</p>
+
+### Deploy Redis Database
+<p align="center">
+  <img src="docs/deploy-redis.png" alt="Deploy Redis" width="800">
+</p>
+
+### Create HPA (Horizontal Pod Autoscaler)
+<p align="center">
+  <img src="docs/create-hpa.png" alt="Create HPA" width="800">
+</p>
+
+### Helm List Releases
+<p align="center">
+  <img src="docs/helm_list.png" alt="Helm List" width="800">
+</p>
+
+### Helm Chart in OpenShift Catalog
+<p align="center">
+  <img src="docs/helm-catalog.png" alt="Helm Catalog" width="800">
+</p>
+
 ## Architecture
 
 ```

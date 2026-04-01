@@ -181,6 +181,31 @@ helm repo update</code></pre>
         <p style="margin-top:8px;font-size:0.85em;color:#999">Lightspeed analyzing failed pods and high-restart containers using checkClusterHealth tool results</p>
       </div>
       <div class="card" style="flex:1 1 100%;max-width:100%">
+        <h3>List Pods (pods_list)</h3>
+        <img src="{{ site.baseurl }}/test-list-pods.png" alt="List Pods" style="width:100%;border-radius:6px;border:1px solid #333">
+        <p style="margin-top:8px;font-size:0.85em;color:#999">Listing pods in openshift-lightspeed namespace using the pods_list_in_namespace tool</p>
+      </div>
+      <div class="card" style="flex:1 1 100%;max-width:100%">
+        <h3>Detect Resource Issues</h3>
+        <img src="{{ site.baseurl }}/pods-with-high-cpu-memory.png" alt="Detect Resource Issues" style="width:100%;border-radius:6px;border:1px solid #333">
+        <p style="margin-top:8px;font-size:0.85em;color:#999">detectResourceIssues tool identifying pods with excessive restarts and high resource consumption</p>
+      </div>
+      <div class="card" style="flex:1 1 100%;max-width:100%">
+        <h3>Deploy Redis Database</h3>
+        <img src="{{ site.baseurl }}/deploy-redis.png" alt="Deploy Redis" style="width:100%;border-radius:6px;border:1px solid #333">
+        <p style="margin-top:8px;font-size:0.85em;color:#999">deployDatabase tool deploying a Redis instance using official RHEL catalog image</p>
+      </div>
+      <div class="card" style="flex:1 1 100%;max-width:100%">
+        <h3>Create HPA (Horizontal Pod Autoscaler)</h3>
+        <img src="{{ site.baseurl }}/create-hpa.png" alt="Create HPA" style="width:100%;border-radius:6px;border:1px solid #333">
+        <p style="margin-top:8px;font-size:0.85em;color:#999">createHpa tool configuring auto-scaling with CPU/memory targets</p>
+      </div>
+      <div class="card" style="flex:1 1 100%;max-width:100%">
+        <h3>Helm List Releases</h3>
+        <img src="{{ site.baseurl }}/helm_list.png" alt="Helm List" style="width:100%;border-radius:6px;border:1px solid #333">
+        <p style="margin-top:8px;font-size:0.85em;color:#999">helm_list tool showing all Helm releases across namespaces</p>
+      </div>
+      <div class="card" style="flex:1 1 100%;max-width:100%">
         <h3>Helm Chart in OpenShift Catalog</h3>
         <img src="{{ site.baseurl }}/helm-catalog.png" alt="Helm Chart Catalog" style="width:100%;border-radius:6px;border:1px solid #333">
         <p style="margin-top:8px;font-size:0.85em;color:#999">OpenShift MCP Server Helm Chart available in the OpenShift Developer Catalog via HelmChartRepository</p>
