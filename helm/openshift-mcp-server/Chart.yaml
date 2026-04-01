@@ -50,6 +50,8 @@ annotations:
       url: https://maximilianoPizarro.github.io/openshift-mcp-server/lightspeed-response.png
     - title: Cluster Health Analysis
       url: https://maximilianoPizarro.github.io/openshift-mcp-server/lightspeed-cluster-health.png
+    - title: Helm Chart in OpenShift Catalog
+      url: https://maximilianoPizarro.github.io/openshift-mcp-server/helm-catalog.png
   artifacthub.io/images: |
     - name: openshift-mcp-server
       image: quay.io/maximilianopizarro/openshift-mcp-server:latest
