@@ -163,6 +163,27 @@ helm repo update</code></pre>
   </section>
 
   <section>
+    <h2>Screenshots</h2>
+    <div class="cards">
+      <div class="card" style="flex:1 1 100%;max-width:100%">
+        <h3>OpenShift Topology View</h3>
+        <img src="{{ site.baseurl }}/topology-view.png" alt="OpenShift Topology View" style="width:100%;border-radius:6px;border:1px solid #333">
+        <p style="margin-top:8px;font-size:0.85em;color:#999">MCP Server pods running in the openshift-lightspeed namespace with OpenShift logos</p>
+      </div>
+      <div class="card" style="flex:1 1 100%;max-width:100%">
+        <h3>Lightspeed Tool Calling</h3>
+        <img src="{{ site.baseurl }}/lightspeed-response.png" alt="Lightspeed Tool Response" style="width:100%;border-radius:6px;border:1px solid #333">
+        <p style="margin-top:8px;font-size:0.85em;color:#999">Qwen3 8B model reasoning about which MCP tool to call (checkClusterHealth)</p>
+      </div>
+      <div class="card" style="flex:1 1 100%;max-width:100%">
+        <h3>Cluster Health Analysis</h3>
+        <img src="{{ site.baseurl }}/lightspeed-cluster-health.png" alt="Cluster Health Analysis" style="width:100%;border-radius:6px;border:1px solid #333">
+        <p style="margin-top:8px;font-size:0.85em;color:#999">Lightspeed analyzing failed pods and high-restart containers using checkClusterHealth tool results</p>
+      </div>
+    </div>
+  </section>
+
+  <section>
     <h2>OLSConfig Integration</h2>
     <pre><code>apiVersion: ols.openshift.io/v1alpha1
 kind: OLSConfig

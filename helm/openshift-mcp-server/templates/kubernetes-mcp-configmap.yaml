@@ -34,20 +34,4 @@ data:
         password: ""
         url: https://charts.openshift.io/
         username: ""
-      - caFile: ""
-        certFile: ""
-        insecure_skip_tls_verify: false
-        keyFile: ""
-        name: openshift-mcp
-        password: ""
-        url: https://maximilianoPizarro.github.io/openshift-mcp-server
-        username: ""
-      - caFile: ""
-        certFile: ""
-        insecure_skip_tls_verify: false
-        keyFile: ""
-        name: showroom-docs-mcp
-        password: ""
-        url: https://maximilianoPizarro.github.io/showroom-docs-mcp
-        username: ""
 {{- end }}

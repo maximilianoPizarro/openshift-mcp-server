@@ -20,17 +20,35 @@ spec:
       labels:
         app: {{ include "openshift-mcp-server.fullname" . }}-k8s-mcp
         app.kubernetes.io/component: k8s-mcp
-        app.openshift.io/runtime: golang
+        app.openshift.io/runtime: openshift
     spec:
       serviceAccountName: {{ .Values.serviceAccount.name }}
       volumes:
         - name: config
           configMap:
             name: {{ include "openshift-mcp-server.fullname" . }}-k8s-mcp
-        - name: tmp
+        - name: helm-cache
           emptyDir: {}
         - name: helm-data
           emptyDir: {}
+      initContainers:
+        - name: helm-repo-update
+          image: registry.access.redhat.com/ubi9/ubi-minimal:latest
+          command: ['sh', '-c']
+          args:
+            - |
+              mkdir -p /helm-cache/repository
+              curl -sL https://charts.openshift.io/index.yaml -o /helm-cache/repository/openshift-helm-charts-index.yaml
+              echo "Downloaded openshift-helm-charts index: $(wc -c < /helm-cache/repository/openshift-helm-charts-index.yaml) bytes"
+          volumeMounts:
+            - name: helm-cache
+              mountPath: /helm-cache
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL
+            runAsNonRoot: true
       containers:
         - name: kubernetes-mcp-server
           image: "{{ .Values.kubernetesMcp.image.repository }}:{{ .Values.kubernetesMcp.image.tag }}"
@@ -55,7 +73,7 @@ spec:
               mountPath: /tmp/helm/config/repositories.yaml
               subPath: repositories.yaml
               readOnly: true
-            - name: tmp
+            - name: helm-cache
               mountPath: /tmp/helm/cache
             - name: helm-data
               mountPath: /tmp/helm/data

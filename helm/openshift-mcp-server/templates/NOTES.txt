@@ -113,12 +113,10 @@ OpenShift MCP Server deployed successfully!
      "Get events in namespace default"
      "List all namespaces in the cluster"
 
-   Helm Operations:
+   Helm Operations (pre-configured repo: openshift-helm-charts):
      "List all helm releases"
-     "Install chart showroom-docs-mcp/showroom-docs-mcp in namespace test-dev"
-     "Uninstall helm release showroom-docs-mcp"
-
-   Pre-configured Helm repos: openshift-helm-charts, openshift-mcp, showroom-docs-mcp
+     "Install chart openshift-helm-charts/hashicorp-vault in namespace vault"
+     "Uninstall helm release my-release"
 
    Performance Testing:
      "Run a storage benchmark in namespace perf-test"
