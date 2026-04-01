@@ -1,9 +1,9 @@
 apiVersion: v2
 name: openshift-mcp-server
-description: Enterprise MCP Server for OpenShift Lightspeed - cluster monitoring, deployment management, and performance testing
+description: "[EXPERIMENTAL] Enterprise MCP Server for OpenShift Lightspeed - cluster monitoring, deployment management, and performance testing"
 type: application
-version: 1.0.0
-appVersion: "1.0.0"
+version: 0.1.0-alpha
+appVersion: "0.1.0-alpha"
 kubeVersion: ">=1.25.0-0"
 home: https://maximilianoPizarro.github.io/openshift-mcp-server
 keywords:
@@ -30,7 +30,7 @@ annotations:
   artifacthub.io/license: Apache-2.0
   artifacthub.io/operator: "false"
   artifacthub.io/containsSecurityUpdates: "false"
-  artifacthub.io/prerelease: "false"
+  artifacthub.io/prerelease: "true"
   artifacthub.io/signKey: ""
   artifacthub.io/links: |
     - name: Documentation

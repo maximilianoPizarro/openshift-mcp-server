@@ -27,7 +27,7 @@ entries:
         - name: maximilianoPizarro
           email: maximiliano.pizarro.5@gmail.com
       artifacthub.io/operator: "false"
-      artifacthub.io/prerelease: "false"
+      artifacthub.io/prerelease: "true"
       artifacthub.io/recommendations: |
         - url: https://artifacthub.io/packages/helm/openshift/openshift-lightspeed
       artifacthub.io/screenshots: |
@@ -35,11 +35,11 @@ entries:
           url: https://maximilianoPizarro.github.io/openshift-mcp-server/openshift-logo.png
       artifacthub.io/signKey: ""
     apiVersion: v2
-    appVersion: 1.0.0
-    created: "2026-03-31T22:39:09.9641783-03:00"
-    description: Enterprise MCP Server for OpenShift Lightspeed - cluster monitoring,
-      deployment management, and performance testing
-    digest: d2a86ca02456d83792b1747e60e9801370d43a40558ed80428cf877ee25981f0
+    appVersion: 0.1.0-alpha
+    created: "2026-03-31T22:41:09.792665-03:00"
+    description: '[EXPERIMENTAL] Enterprise MCP Server for OpenShift Lightspeed -
+      cluster monitoring, deployment management, and performance testing'
+    digest: 364ac2a7369f1600ebd1cf1e8e09d2f9de358c1dee4bbdf38ad2fdfbb3e02a0a
     home: https://maximilianoPizarro.github.io/openshift-mcp-server
     icon: https://maximilianoPizarro.github.io/openshift-mcp-server/openshift-logo.png
     keywords:
@@ -64,6 +64,6 @@ entries:
     - https://github.com/openshift/openshift-mcp-server
     type: application
     urls:
-    - https://maximilianoPizarro.github.io/openshift-mcp-server/openshift-mcp-server-1.0.0.tgz
-    version: 1.0.0
-generated: "2026-03-31T22:39:09.9626264-03:00"
+    - https://maximilianoPizarro.github.io/openshift-mcp-server/openshift-mcp-server-0.1.0-alpha.tgz
+    version: 0.1.0-alpha
+generated: "2026-03-31T22:41:09.7906636-03:00"

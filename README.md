@@ -4,7 +4,21 @@
 
 <h1 align="center">OpenShift MCP Server</h1>
 
-<p align="center"><strong>Enterprise MCP Server for OpenShift Lightspeed</strong></p>
+<p align="center">
+  <strong>Enterprise MCP Server for OpenShift Lightspeed</strong><br>
+  <code>⚠️ EXPERIMENTAL — This project is under active development and not yet ready for production use.</code>
+</p>
+
+<p align="center">
+  <a href="https://github.com/maximilianoPizarro/openshift-mcp-server/actions"><img src="https://img.shields.io/github/actions/workflow/status/maximilianoPizarro/openshift-mcp-server/pages.yml?branch=main&label=build" alt="Build Status"></a>
+  <img src="https://img.shields.io/badge/version-0.1.0--alpha-orange" alt="Version">
+  <img src="https://img.shields.io/badge/status-experimental-yellow" alt="Status">
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-Apache%202.0-blue" alt="License"></a>
+  <a href="https://artifacthub.io/packages/helm/openshift-mcp-server/openshift-mcp-server"><img src="https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/openshift-mcp-server" alt="ArtifactHub"></a>
+</p>
+
+> **Warning**
+> This is an **experimental** project in early alpha stage. APIs, tool definitions, and Helm chart values may change without notice between versions. Use at your own risk in non-production environments.
 
 Dual MCP server deployment combining a custom **Quarkus** server (19 operational tools for monitoring, deployment, and performance testing) with the official **[openshift/openshift-mcp-server](https://github.com/openshift/openshift-mcp-server)** (generic Kubernetes CRUD, pod exec/logs, Helm management). Designed to integrate with **OpenShift Lightspeed** as an enterprise-grade AI assistant backend.
 
